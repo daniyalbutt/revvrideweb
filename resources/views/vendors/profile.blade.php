@@ -8,6 +8,18 @@
         integrity="sha512-wJgJNTBBkLit7ymC6vvzM1EcSWeM9mmOu+1USHaRBbHkm6W9EgM0HY27+UtUaprntaYQJF75rc8gjxllKs5OIQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <style>
+   .map {
+    width: 100%;
+    height: 100vh;
+}
+
+div#map {
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+}
+    </style>
 @endpush
 @section('content')
     <section class="mainBanner">
@@ -238,13 +250,17 @@
                             <form action="{{ route('vendor.location.update') }}" id="locationupdate">
                                 @csrf
                                 <input type="hidden" id="locations_lat" name="locations_lat">
-                                <input type="hidden" id="locations_lng" name="locations_lng" value="{{ Auth::user()->lat }}">
+                                <input type="hidden" id="locations_lng" name="locations_lng"
+                                    value="{{ Auth::user()->lat }}">
                                 <div class="regitration-map-box" id="pac-card">
                                     <div class="contact-form-fields registration-form-fields justify-content-center">
                                         <div class="contact-form-field registration-form-field search-field">
 
-                                            <input type="search" id="gsearch" name="gsearch" value="{{ Auth::user()->location }}">
+                                            <input type="search" id="gsearch" name="gsearch"
+                                                value="{{ Auth::user()->location }}">
                                             <i class="fas fa-magnifying-glass"></i>
+
+
                                             <div class="map-icon"><i class="fas fa-map-marker-alt"></i></div>
 
 
@@ -268,8 +284,10 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="map">
 
-                                    <div id="map"></div>
+                                        <div id="map"></div>
+                                    </div>
                                     <div id="infowindow-content">
                                         <span id="place-name" class="title"></span><br />
                                         <span id="place-address"></span>
@@ -601,8 +619,8 @@
                                     <a href="#" class="btn-c step-form-prev-custom">Go Back</a>
                                 </div>
                                 <!-- <div class="regiter-btn payment-method-btn text-center mb-10">
-                                                                                            <a href="#" class="btn-c step-form-next">Add a payment method</a>
-                                                                                            </div> -->
+                                                                                                <a href="#" class="btn-c step-form-next">Add a payment method</a>
+                                                                                                </div> -->
                             </div>
                             <div class="registration-content text-center">
                                 <a class="" href="./">SKIP</a>
@@ -1017,9 +1035,95 @@
 
 
 
-    <script type="text/javascript"
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABwtgNHhRqnfw_sXX1-x-f0LQNm4lxk6s&libraries=places"></script>
+    {{-- <script type="text/javascript"
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABwtgNHhRqnfw_sXX1-x-f0LQNm4lxk6s&libraries=places"></script> --}}
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABwtgNHhRqnfw_sXX1-x-f0LQNm4lxk6s&callback=initAutocomplete&libraries=places&v=weekly"
+        defer></script>
     <script>
+        // This example adds a search box to a map, using the Google Place Autocomplete
+        // feature. People can enter geographical searches. The search box will return a
+        // pick list containing a mix of places and predicted search terms.
+        // This example requires the Places library. Include the libraries=places
+        // parameter when you first load the API. For example:
+        // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+        function initAutocomplete() {
+            const map = new google.maps.Map(document.getElementById("map"), {
+                center: {
+                    lat: -33.8688,
+                    lng: 151.2195
+                },
+                zoom: 13,
+                mapTypeId: "roadmap",
+            });
+            // Create the search box and link it to the UI element.
+            const input = document.getElementById("gsearch");
+            const searchBox = new google.maps.places.SearchBox(input);
+
+            map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+            // Bias the SearchBox results towards current map's viewport.
+            map.addListener("bounds_changed", () => {
+                searchBox.setBounds(map.getBounds());
+            });
+
+            let markers = [];
+
+            // Listen for the event fired when the user selects a prediction and retrieve
+            // more details for that place.
+            searchBox.addListener("places_changed", () => {
+                const places = searchBox.getPlaces();
+
+                if (places.length == 0) {
+                    return;
+                }
+
+                // Clear out the old markers.
+                markers.forEach((marker) => {
+                    marker.setMap(null);
+                });
+                markers = [];
+
+                // For each place, get the icon, name and location.
+                const bounds = new google.maps.LatLngBounds();
+
+                places.forEach((place) => {
+                    if (!place.geometry || !place.geometry.location) {
+                        console.log("Returned place contains no geometry");
+                        return;
+                    }
+
+                    const icon = {
+                        url: place.icon,
+                        size: new google.maps.Size(71, 71),
+                        origin: new google.maps.Point(0, 0),
+                        anchor: new google.maps.Point(17, 34),
+                        scaledSize: new google.maps.Size(25, 25),
+                    };
+
+                    // Create a marker for each place.
+                    markers.push(
+                        new google.maps.Marker({
+                            map,
+                            icon,
+                            title: place.name,
+                            position: place.geometry.location,
+                        }),
+                    );
+                    if (place.geometry.viewport) {
+                        // Only geocodes have viewport.
+                        bounds.union(place.geometry.viewport);
+                    } else {
+                        bounds.extend(place.geometry.location);
+                    }
+                });
+                map.fitBounds(bounds);
+            });
+        }
+
+        window.initAutocomplete = initAutocomplete;
+    </script>
+
+    {{-- <script>
         function initialize() {
             var input = document.getElementById('gsearch');
             var autocomplete = new google.maps.places.Autocomplete(input);
@@ -1030,7 +1134,7 @@
             });
         }
         google.maps.event.addDomListener(window, 'load', initialize);
-    </script>
+    </script> --}}
     <script>
         $.ajaxSetup({
             headers: {

@@ -89,6 +89,9 @@ Route::group(['prefix' => 'vendor', 'middleware' => ['is_vendor', 'auth']], func
     Route::post('updatepaymentdetails-apple',[VendorToursController::class,'applepaystore'])->name('vendor.apple.store');
     Route::post('updatepaymentdetails-stripe',[VendorToursController::class,'stripestore'])->name('vendor.stripe.store');
     Route::post('update-location',[VendorToursController::class,'locationupdate'])->name('vendor.location.update');
+
+    Route::get('reservations',[VendorController::class,'reservations'])->name('vendor.reservations');
+
 });
 
 

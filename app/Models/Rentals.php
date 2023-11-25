@@ -33,5 +33,9 @@ class Rentals extends Model
     {
         return $this->hasMany(RentalsReviews::class, 'rental_id', 'id')->orderBy('id', 'desc');
     }
+    public function vendor()
+    {
+        return $this->belongsTo(User::class);
+    }
 
 }

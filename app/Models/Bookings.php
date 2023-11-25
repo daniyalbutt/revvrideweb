@@ -25,7 +25,10 @@ class Bookings extends Model
         'total',
         'transaction_id'
     ];
-
+    public function bookable()
+    {
+        return $this->morphTo();
+    }
     public function getBookType(){
         return $this->hasOne($this->bookable_type, 'id', 'bookable_id');
     }

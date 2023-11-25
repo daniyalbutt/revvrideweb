@@ -37,7 +37,7 @@
                         <div class="col-lg-4 text-right">
                             <div class="total_earn">
                                 <span>Total Earned</span>
-                                <p>$595.50</p>
+                                <p>${{$data->totalSum }}</p>
                             </div>
                         </div>
                     </div>
@@ -45,19 +45,14 @@
                         <div class="col-md-3">
                             <div class="state-box">
                                 <span>Bookings</span>
-                                <p>20</p>
+                                <p>{{ $data->booking_total }}</p>
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <div class="state-box">
-                                <span>Total Time</span>
-                                <p>15 hrs 30 min</p>
-                            </div>
-                        </div>
+
                         <div class="col-md-3">
                             <div class="state-box">
                                 <span>Upcoming</span>
-                                <p>05</p>
+                                <p>{{$data->upcoming_booking_total }}</p>
                             </div>
                         </div>
                     </div>

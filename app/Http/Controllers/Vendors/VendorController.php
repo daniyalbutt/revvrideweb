@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use DB;
 use Auth;
-use App\Models\User;
+use App\Models\{User, Bookings};
 use App\Models\UserCategories;
 
 class VendorController extends Controller
@@ -26,9 +26,22 @@ class VendorController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
+    public function reservations()
+    {
+        $orders = Bookings::whereHas('bookable', function ($query) {
+            $query->where('user_id', Auth::user()->id);
+        })->get();
+        return view('vendors.reservation', compact('orders'));
+    }
+     public function index()
+    {
+        $data = Tours::where('user_id', Auth::user()->id)->orderBy('id', 'desc')->get();
+        return view('vendors.tour.index', compact('data'));
+    }
 
     public function profile(){
         $categories = DB::table('categories')->get();
+
         return view('vendors.profile', compact('categories'));
     }
 
@@ -88,6 +101,15 @@ class VendorController extends Controller
     }
 
     public function vendorDashboard(){
-        return view('vendors.dashboard');
+        $data =  Bookings::whereHas('bookable', function ($query) {
+            $query->where('user_id', Auth::user()->id);
+        })
+        ->select(
+            DB::raw('COUNT(ID) as booking_total'),
+            DB::raw('SUM(total) as totalSum'),
+            DB::raw('SUM(CASE WHEN datetime > NOW() THEN 1 ELSE 0 END) as upcoming_booking_total')
+        )
+        ->first();
+        return view('vendors.dashboard', compact('data'));
     }
 }
