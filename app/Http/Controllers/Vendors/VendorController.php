@@ -27,6 +27,11 @@ class VendorController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
+
+    public function withdraw(){
+        return view('vendors.withdraw');
+    }
+
     public function reservationDetail($id){
         $data = Bookings::where('id',$id)->with('bookable')->first();
 

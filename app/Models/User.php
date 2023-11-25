@@ -72,4 +72,8 @@ class User extends Authenticatable
         return $this->hasMany(Bookings::class,'user_id')->orderBy('id', 'desc');
     }
 
+    public function payments(){
+        return $this->hasMany(Payment::class);
+    }
+
 }
