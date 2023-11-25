@@ -13,7 +13,7 @@ class ToursController extends Controller
      */
     public function index()
     {
-        $tours = Tours::get();
+        $tours = Tours::orderBy('id', 'desc')->get();
         $data['tours'] = $tours;
         $data['tourrecommendeds'] = $tours->where('recommended', '1')->take(2);
 

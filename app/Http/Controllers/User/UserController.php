@@ -8,10 +8,13 @@ use DB;
 use Auth;
 use App\Models\User;
 use App\Models\Rentals;
+use App\Models\Tours;
 use App\Models\RentalsAddons;
 use App\Models\UserCategories;
 use App\Models\Bookings;
 use App\Models\BookingAddons;
+use App\Models\RentalsReviews;
+use App\Models\ToursReviews;
 use Session;
 use Stripe;
 use DateTime;
@@ -43,45 +46,73 @@ class UserController extends Controller
     }
 
     public function booking(Request $request){
-        $form_availability = $request->form_availability;
-        if($form_availability == 0){
-            return redirect()->back()->with('error', 'Please Select Date');
+
+        if($request->bookable_type == 'rental'){
+            $form_availability = $request->form_availability;
+            if($form_availability == 0){
+                return redirect()->back()->with('error', 'Please Select Date');
+            }
+            $cartId = $request->product_id;
+
+            $cart = array();
+
+            if (Session::has('cart')) {
+                $cart = Session::get('cart');
+            }
+
+            if (array_key_exists($cartId, $cart)) {
+                unset($cart);
+            }
+
+            $productFirstrow = Rentals::where('id', $cartId)->first();
+            $cart['id'] = $cartId;
+            $cart['name'] = $productFirstrow->title;
+            $cart['baseprice'] = $productFirstrow->price;
+            $cart['adult_quantity'] = $request->adult_quantity;
+            $cart['children_quantity'] = $request->children_quantity;
+            $cart['infants_quantity'] = $request->infants_quantity;
+            $cart['insurance'] = $request->insurance;
+            $cart['datetime'] = $request->datetime;
+            $cart['from_time'] = $request->from_time;
+            $cart['to_time'] = $request->to_time;
+            $cart['total_price'] = $request->form_total_price;
+            $cart['form_availability'] = $request->form_availability;
+            $cart['bookable_type'] = $request->bookable_type;
+            $quantity = $request->quantity;
+            foreach ($quantity as $key => $value) {
+                $data = RentalsAddons::where('id', $key)->first();
+                $cart['addons'][$key]['id'] = $data->id;
+                $cart['addons'][$key]['name'] = $data->name;
+                $cart['addons'][$key]['price'] = $data->price;
+                $cart['addons'][$key]['quantity'] = $value;
+            }
+
+            Session::put('cart', $cart);
+        }else{
+            $cartId = $request->product_id;
+
+            $cart = array();
+
+            if (Session::has('cart')) {
+                $cart = Session::get('cart');
+            }
+
+            if (array_key_exists($cartId, $cart)) {
+                unset($cart);
+            }
+
+            $productFirstrow = Tours::where('id', $cartId)->first();
+            $cart['id'] = $cartId;
+            $cart['name'] = $productFirstrow->title;
+            $cart['baseprice'] = $productFirstrow->price;
+            $cart['adult_quantity'] = $request->adult_quantity;
+            $cart['children_quantity'] = $request->children_quantity;
+            $cart['infants_quantity'] = $request->infants_quantity;
+            $cart['insurance'] = $request->insurance;
+            $cart['total_price'] = $request->form_total_price;
+            $cart['bookable_type'] = $request->bookable_type;
+            Session::put('cart', $cart);
         }
-        $cartId = $request->product_id;
-
-        $cart = array();
-
-        if (Session::has('cart')) {
-			$cart = Session::get('cart');
-		}
-
-        if (array_key_exists($cartId, $cart)) {
-            unset($cart);
-        }
-
-        $productFirstrow = Rentals::where('id', $cartId)->first();
-        $cart['id'] = $cartId;
-        $cart['name'] = $productFirstrow->title;
-        $cart['baseprice'] = $productFirstrow->price;
-        $cart['adult_quantity'] = $request->adult_quantity;
-        $cart['children_quantity'] = $request->children_quantity;
-        $cart['infants_quantity'] = $request->infants_quantity;
-        $cart['insurance'] = $request->insurance;
-        $cart['datetime'] = $request->datetime;
-        $cart['from_time'] = $request->from_time;
-        $cart['to_time'] = $request->to_time;
-        $cart['total_price'] = $request->form_total_price;
-        $cart['form_availability'] = $request->form_availability;
-        $quantity = $request->quantity;
-        foreach ($quantity as $key => $value) {
-            $data = RentalsAddons::where('id', $key)->first();
-            $cart['addons'][$key]['id'] = $data->id;
-            $cart['addons'][$key]['name'] = $data->name;
-            $cart['addons'][$key]['price'] = $data->price;
-            $cart['addons'][$key]['quantity'] = $value;
-        }
-
-        Session::put('cart', $cart);
         return redirect()->route('user.checkout');
     }
 
@@ -97,8 +128,7 @@ class UserController extends Controller
     public function order(Request $request){
 
         $cart = Session::get('cart');
-        dd($total_price = (float)$total_price);
-
+        
         \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
 
         $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
@@ -126,13 +156,8 @@ class UserController extends Controller
         //       'cvc' => $request->card_cvc,
         //     ],
         // ]);
-
-        $a = $request->total_price;
-        $total_price = str_replace( ',', '', $a );
-        if( is_numeric( $total_price ) ) {
-            $a = $total_price;
-        }  
-        $total_price = (float)$total_price;
+        
+        $total_price = (float)$request->total_price;
 
         try {
             $charge = \Stripe\Charge::create ([
@@ -146,30 +171,51 @@ class UserController extends Controller
                 if($charge->captured){
                     $booking_code = rand(1000000,9999999);
                     $user_id = Auth::user()->id;
-                    $datetime = $cart['datetime'];
-                    $start_datetime = new DateTime($cart['from_time']); 
-                    $diff = $start_datetime->diff(new DateTime($cart['to_time'])); 
+                    if($cart['bookable_type'] == 'rental'){
+                        $datetime = $cart['datetime'];
+                        $start_datetime = new DateTime($cart['from_time']); 
+                        $diff = $start_datetime->diff(new DateTime($cart['to_time'])); 
+                        $duration = $diff->h;
+                    }else{
+                        $datetime = null;
+                        $start_datetime = null;
+                        $diff = null;
+                        $duration = null;
+                    }
 
-                    $duration = $diff->h;
                     $insurance_amount = 0;
                     if($cart['insurance'] != 'NO'){
                         $insurance_amount = 50;
                     }
-                    $bookable_type = 'App\Models\Rentals';
+                    if($cart['bookable_type'] == 'rental'){
+                        $bookable_type = 'App\Models\Rentals';
+                    }else{
+                        $bookable_type = 'App\Models\Tours';
+                    }
                     $bookable_id = $cart['id'];
                     $booking_status = 'Confirmed';
                     $adults = $cart['adult_quantity'];
                     $childs = $cart['children_quantity'];
                     $infants = $cart['infants_quantity'];
-                    $rental_availability_id = $cart['form_availability'];
+                    if($cart['bookable_type'] == 'rental'){
+                        $rental_availability_id = $cart['form_availability'];
+                    }else{
+                        $rental_availability_id = 0;
+                    }
+
                     $total = $cart['total_price'];
 
                     $data = new Bookings();
                     $data->booking_code = $booking_code;
                     $data->user_id = $user_id;
-                    $date = strtotime($cart['datetime']);
-                    $data->datetime = date('Y-m-d', $date) . ' ' . $cart['from_time'];
-                    $data->duration = $duration;
+                    if($cart['bookable_type'] == 'rental'){
+                        $date = strtotime($cart['datetime']);
+                        $data->datetime = date('Y-m-d', $date) . ' ' . $cart['from_time'];
+                        $data->duration = $duration;
+                    }else{
+                        $data->datetime = null;
+                        $data->duration = 0;
+                    }
                     $data->insurance_amount = $insurance_amount;
                     $data->bookable_type = $bookable_type;
                     $data->bookable_id = $bookable_id;
@@ -182,16 +228,19 @@ class UserController extends Controller
                     $data->transaction_id = $charge->id;
                     $data->save();
 
-                    foreach($cart['addons'] as $key => $addons){
-                        $book_addon = new BookingAddons();
-                        $book_addon->booking_id = $data->id;
-                        $book_addon->rental_id = $bookable_id;
-                        $book_addon->rental_addons_id = $addons['id'];
-                        $book_addon->quantity = $addons['quantity'];
-                        $book_addon->amount = $addons['price'];
-                        $book_addon->total = (float)$addons['price'] * (int)$addons['quantity'];
-                        $book_addon->save();
+                    if($cart['bookable_type'] == 'rental'){
+                        foreach($cart['addons'] as $key => $addons){
+                            $book_addon = new BookingAddons();
+                            $book_addon->booking_id = $data->id;
+                            $book_addon->rental_id = $bookable_id;
+                            $book_addon->rental_addons_id = $addons['id'];
+                            $book_addon->quantity = $addons['quantity'];
+                            $book_addon->amount = $addons['price'];
+                            $book_addon->total = (float)$addons['price'] * (int)$addons['quantity'];
+                            $book_addon->save();
+                        }
                     }
+
                     Session::flash('success', 'Payment successful!');
                 }
             }
@@ -208,5 +257,28 @@ class UserController extends Controller
 
     public function getBooking(){
         return view('user.booking');
+    }
+
+    public function bookingReview($id){
+        $data = Bookings::find($id);
+        return view('user.review', compact('data'));
+    }
+
+    public function reviewPost(Request $request){
+        if($request->bookable_type == 'App\Models\Rentals'){
+            $data = new RentalsReviews();
+            $data->user_id = Auth::user()->id;
+            $data->rental_id = $request->bookable_id;
+            $data->comments = $request->comments;
+            $data->save();
+        }else{
+            $data = new ToursReviews();
+            $data->user_id = Auth::user()->id;
+            $data->tour_id = $request->bookable_id;
+            $data->comment = $request->comments;
+            $data->save();
+        }
+        Session::flash('success', 'Review Added Successful!');
+        return back();
     }
 }

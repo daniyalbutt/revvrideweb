@@ -29,4 +29,9 @@ class Rentals extends Model
         return $this->hasMany(RentalsAvailability::class, 'rental_id', 'id');
     }
 
+    public function reviews()
+    {
+        return $this->hasMany(RentalsReviews::class, 'rental_id', 'id');
+    }
+
 }

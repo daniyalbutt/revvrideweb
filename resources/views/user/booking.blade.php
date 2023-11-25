@@ -44,21 +44,56 @@
                                 <tr>
                                     <th>Name</th>
                                     <th>Time</th>
-                                    <th>Duration</th>
                                     <th>ID Number</th>
                                     <th>Insurance</th>
                                     <th>Cost</th>
+                                    <th>Type</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach(Auth::user()->get_booking as $key => $booking)
                                 <tr>
-                                    <td></td>
-                                    <td>{{ date('d M, Y h:i a', strtotime($booking->datetime)) }}</td>
+                                    <td>
+                                        @if($booking->getBookType != null)
+                                        <div class="content-wrapper">
+                                            <img src="{{ $booking->getBookType->Images[0]->image }}" alt="" width="120px">
+                                            <div class="content-wrapper-head">
+                                                <h4>{{ $booking->getBookType->title }}</h4>
+                                                <span><i class="fa-solid fa-location-dot"></i> {{ $booking->getBookType->locations }}</span>
+                                            </div>
+                                        </div>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if($booking->bookable_type == 'App\Models\Rentals')
+                                        {{ date('d M, Y h:i a', strtotime($booking->datetime)) }}
+                                        @else
+                                        @if($booking->getBookType != null)
+                                        <p>
+                                            {{ date('d M, Y h:i a', strtotime($booking->getBookType->start_date)) }}
+                                            <br>
+                                            {{ date('d M, Y h:i a', strtotime($booking->getBookType->end_date)) }}
+                                        </p>
+                                        @else
+                                        @endif
+                                        @endif
+                                    </td>
                                     <td>{{ $booking->booking_code }}</td>
-                                    <td>{{ $booking->duration }} Hours</td>
                                     <td>${{ $booking->insurance_amount }}</td>
                                     <td>${{ $booking->total }}</td>
+                                    <td>
+                                        @if($booking->bookable_type == 'App\Models\Rentals')
+                                        <button class="btn btn-primary btn-sm">RENTAL</button>
+                                        @else
+                                        <button class="btn btn-info btn-sm">TOUR</button>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if($booking->checkPast())
+                                        <a href="{{ route('user.booking.review', $booking->id) }}" class="btn btn-secondary btn-sm" title="Add Review"><i class="fa-solid fa-star"></i></a>
+                                        @endif
+                                    </td>
                                 </tr>
                                 @endforeach
                             </tbody>

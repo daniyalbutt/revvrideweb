@@ -90,10 +90,9 @@
                                                     class="fas fa-angle-down"></i></button>
                                         </div>
                                         <ul class="user-profile-list">
-                                            <li><a href="profile.php">Dashboard</a></li>
+                                            <li><a href="{{ route('user.dashboard') }}">Dashboard</a></li>
                                             <li><a href="{{ route('user.profile') }}">Profile</a></li>
-                                            <li><a href="chat.php">Messages</a></li>
-                                            <li><a href="my-bookings.php">Bookings</a></li>
+                                            <li><a href="{{ route('user.booking.get') }}">Booking</a></li>
                                             <li><a href="{{ route('logout') }}"
                                                     onclick="event.preventDefault();document.getElementById('logout-form').submit();">Logout</a>
                                             </li>
@@ -116,6 +115,7 @@
                                             </button>
                                         </div>
                                         <ul class="user-profile-list">
+                                            <li><a href="{{ route('vendor.dashboard') }}">Dashboard</a></li>
                                             <li><a href="{{ route('vendor.profile') }}">Profile</a></li>
                                             <li><a href="chat.php">Messages</a></li>
                                             <li><a href="my-bookings.php">Bookings</a></li>

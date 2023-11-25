@@ -228,15 +228,37 @@ $(document).ready(function () {
             total_price = product_price * total_person;
             showPrice();
         }else if(name == 'addons'){
-            $price = $(a).parent().data('price');
-            addon_price = parseFloat($price) * parseInt($(a).parent().find('.quantity__input').val());
+            var get_addons = $('.addons-wrapper').find('.quantity__input');
+            var inner_addon_price = 0;
+            $(get_addons).each(function(){
+                $price = $(this).parent().data('price');
+                inner_addon_price += parseFloat($price) * parseInt($(this).parent().find('.quantity__input').val());
+            });
+            addon_price = inner_addon_price;
             showPrice();
         }
     }
+    $(".checkboxes input:radio").on('click', function() {
+        var $box = $(this);
+        if ($box.is(":checked")) {
+            if($($box).val() == "YES"){
+                insurance_amount = 50;
+            }else{
+                insurance_amount = 0;
+            }
+            var group = "input:checkbox[name='" + $box.attr("name") + "']";
+            $(group).prop("checked", false);
+            $box.prop("checked", true);
+        } else {
+            $box.prop("checked", false);
+        }
+        showPrice();
+    });
+    
 
     function showPrice(){
         $('#total_price').text((total_price + addon_price + insurance_amount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
-        $('#form-total-price').val((total_price + addon_price + insurance_amount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'))
+        console.log($('#form-total-price').val((total_price + addon_price + insurance_amount).toFixed(2)));
     }
 
 

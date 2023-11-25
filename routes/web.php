@@ -93,5 +93,7 @@ Route::group(['middleware' => ['is_user', 'auth']], function(){
     route::post('booking', [UserController::class, 'booking'])->name('user.booking');
     route::get('checkout', [UserController::class, 'checkout'])->name('user.checkout');
     route::post('order', [UserController::class, 'order'])->name('user.order');
-    route::get('booking', [UserController::class, 'getBooking'])->name('user.booking');
+    route::get('booking', [UserController::class, 'getBooking'])->name('user.booking.get');
+    route::get('booking/review/{id}', [UserController::class, 'bookingReview'])->name('user.booking.review');
+    route::post('review/post', [UserController::class, 'reviewPost'])->name('user.review.post');
 });

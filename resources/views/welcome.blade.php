@@ -254,11 +254,11 @@
                         <div class="col-lg-3 col-md-6 col-12">
                             <div class="popular-activity-box">
                                 <div class="popular-activity-box-img">
-                                    <img src="{{ asset('assets/images/p1.png') }}" alt="">
+                                    <img src="{{( count($rental->Images) != 0 ? $rental->Images[0]->image : ' ') }}" alt="">
                                 </div>
                                 <div class="popular-activity-box-content">
-                                    <div class="popular-activity-box-content-icon"><img
-                                            src="{{ asset('assets/images/i2.png') }}" alt="">
+                                    <div class="popular-activity-box-content-icon">
+                                        <img src="{{ asset('assets/images/i2.png') }}" alt="">
                                     </div>
                                     <h6>{{ $rental->Category->title }}</h6>
                                     <hr class="seperator">
@@ -405,7 +405,7 @@
                                                     <h6>{{ Carbon\Carbon::parse($tour->start_date)->format('d M') . ' - ' . Carbon\Carbon::parse($tour->end_date)->format('d M') }}
                                                     </h6>
                                                 </div>
-                                                <img src="{{ asset('assets/images/spot.jpg') }}" alt="">
+                                                <img src="{{( count($tour->Images) != 0 ? $tour->Images[0]->image : ' ') }}" alt="">
                                             </div>
                                             <div class="best-spots-box-content">
                                                 <h4 class="mb-5">{{ $tour->title }}</h4>

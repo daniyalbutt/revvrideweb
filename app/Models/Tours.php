@@ -15,4 +15,9 @@ class Tours extends Model
     {
         return $this->hasMany(ToursImages::class, 'tour_id', 'id');
     }
+
+    public function get_reviews()
+    {
+        return $this->hasMany(ToursReviews::class, 'tour_id', 'id');
+    }
 }

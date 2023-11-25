@@ -54,6 +54,8 @@ class VendorToursController extends Controller
         $data = new Tours();
         $data->user_id = Auth::user()->id;
         $data->locations = $request->locations;
+        $data->locations_lat = $request->locations_lat;
+        $data->locations_lng = $request->locations_lng;
         $data->title = $request->title;
         $data->price = $request->price;
         $data->desc = $request->desc;
@@ -121,6 +123,8 @@ class VendorToursController extends Controller
 
         $data = Tours::find($id);
         $data->locations = $request->locations;
+        $data->locations_lat = $request->locations_lat;
+        $data->locations_lng = $request->locations_lng;
         $data->title = $request->title;
         $data->price = $request->price;
         $data->desc = $request->desc;

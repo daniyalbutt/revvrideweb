@@ -241,6 +241,7 @@
                     </li>
                     <form action="{{ route('user.booking') }}" method="post">
                         @csrf
+                        <input type="hidden" name="bookable_type" value="rental">
                         <input type="hidden" name="product_id" id="product_id" value="{{ $inners->id }}">
                         <input type="hidden" name="form_availability" id="form-availability" value="0">
                         <input type="hidden" name="form_total_price" value="{{ $inners->price }}" id="form-total-price">
@@ -316,7 +317,7 @@
                             </div>
                         </li>
                         <li>
-                            <div class="additional-box detail-filter-content">
+                            <div class="additional-box detail-filter-content addons-wrapper">
                                 <h3 class="mb-20">ADDONS <img src="{{ asset('assets/images/info-icon.webp') }}"
                                     alt=""></h3>
                                 @foreach($inners->addons as $key => $addon)
@@ -399,7 +400,7 @@
                     <div>
                         <div class="sortby">
                             <div>
-                                <h6><i class="far fa-filter"></i> Filter:</h6>
+                                <h6><i class="fa fa-filter"></i> Filter:</h6>
                             </div>
                             <div>
                                 <div>
@@ -416,78 +417,27 @@
                 </div>
             </div>
             <ul class="detail-review-list">
+                @foreach($inners->reviews as $key => $reviews)
                 <li>
                     <div class="review-box">
                         <div class="review-box-img-and-content mb-20">
                             <div class="review-box-img">
-                                <img src="assets/images/r1.png" alt="">
+                                <img src="{{ $reviews->getUser->display_picture }}" alt="">
                             </div>
                             <div class="review-box-content">
                                 <div><i class="fas fa-star"></i><i class="fas fa-star"></i><i
                                     class="fas fa-star"></i><i class="fas fa-star"></i><i
                                     class="fas fa-star"></i></div>
-                                <h6>Dominic Dawn</h6>
-                                <span>July 25, 2023</span>
+                                <h6>{{ $reviews->getUser->first_name }} {{ $reviews->getUser->last_name }}</h6>
+                                <span>{{ date('M d, Y', strtotime($reviews->created_at)) }}</span>
                             </div>
                         </div>
                         <div class="review-box-content">
-                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-                                Ipsum has been the industry's standard dummy text ever since the 1500s, when an
-                                unknown printer took a galley of type and scrambled it to make a type specimen book.
-                                It has survived not only five centuries, but also the leap into electronic
-                                typesetting, 
-                            </p>
+                            <p>{{ $reviews->comments }}</p>
                         </div>
                     </div>
                 </li>
-                <li>
-                    <div class="review-box">
-                        <div class="review-box-img-and-content mb-20">
-                            <div class="review-box-img">
-                                <img src="assets/images/r2.png" alt="">
-                            </div>
-                            <div class="review-box-content">
-                                <div><i class="fas fa-star"></i><i class="fas fa-star"></i><i
-                                    class="fas fa-star"></i><i class="fas fa-star"></i><i
-                                    class="fas fa-star"></i></div>
-                                <h6>Dominic Dawn</h6>
-                                <span>July 25, 2023</span>
-                            </div>
-                        </div>
-                        <div class="review-box-content">
-                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-                                Ipsum has been the industry's standard dummy text ever since the 1500s, when an
-                                unknown printer took a galley of type and scrambled it to make a type specimen book.
-                                It has survived not only five centuries, but also the leap into electronic
-                                typesetting, 
-                            </p>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div class="review-box">
-                        <div class="review-box-img-and-content mb-20">
-                            <div class="review-box-img">
-                                <img src="assets/images/r3.png" alt="">
-                            </div>
-                            <div class="review-box-content">
-                                <div><i class="fas fa-star"></i><i class="fas fa-star"></i><i
-                                    class="fas fa-star"></i><i class="fas fa-star"></i><i
-                                    class="fas fa-star"></i></div>
-                                <h6>Dominic Dawn</h6>
-                                <span>July 25, 2023</span>
-                            </div>
-                        </div>
-                        <div class="review-box-content">
-                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-                                Ipsum has been the industry's standard dummy text ever since the 1500s, when an
-                                unknown printer took a galley of type and scrambled it to make a type specimen book.
-                                It has survived not only five centuries, but also the leap into electronic
-                                typesetting, 
-                            </p>
-                        </div>
-                    </div>
-                </li>
+                @endforeach
             </ul>
         </div>
     </div>
@@ -679,23 +629,6 @@
     var addon_price = 0;
     var insurance_amount = 0;
 
-
-    $("input:radio").on('click', function() {
-        var $box = $(this);
-        if ($box.is(":checked")) {
-            if($($box).val() == "YES"){
-                insurance_amount = 50;
-            }else{
-                insurance_amount = 0;
-            }
-            var group = "input:checkbox[name='" + $box.attr("name") + "']";
-            $(group).prop("checked", false);
-            $box.prop("checked", true);
-        } else {
-            $box.prop("checked", false);
-        }
-        showPrice();
-    });
 
 
 

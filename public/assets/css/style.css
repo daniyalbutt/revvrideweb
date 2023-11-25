@@ -713,6 +713,7 @@ select {
 
 .popular-activity-box {
     margin-top: -150px;
+    margin-bottom: 30px;
 }
 
 .popular-activity-box-content h6 {
@@ -789,6 +790,8 @@ select {
 
 .best-spots-box-img img {
     height: 100%;
+    object-fit: cover;
+    object-position: center;
 }
 
 .best-spots-box-img-content h6 {
@@ -5564,3 +5567,105 @@ ul.detail-filter-list form > li {
     background-color: transparent;
     border: 0;
 }
+.content-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.content-wrapper img {
+    border-radius: 50px;
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+}
+
+.content-wrapper h4 {
+    margin-bottom: 10px;
+}
+
+.content-wrapper span {
+    font-size: 15px;
+    color: #9d9d9d;
+}
+.date-wrapper {margin-top: 15px;border-top: 1px solid #C5C5C5;padding-top: 20px;}
+
+.date-wrapper li {
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.date-wrapper li:last-child {
+    margin-bottom: 0;
+}
+
+.date-wrapper span {
+    font-size: 15px;
+}
+.date-wrapper strong {
+    font-size: 16px;
+    color: var(--black);
+    font-weight: 500;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+.sports-detail-img img {
+    width: 100%;
+    height: 600px;
+    object-fit: cover;
+}
+
+.wrapper {
+    position: relative;
+    display: block;
+    border: none;
+    font-size: 14px;
+    text-align: left;
+    width: 155px;
+    height: 32px;
+  }
+  
+  .wrapper input {
+    border: 0;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    position: absolute !important;
+    clip: rect(1px 1px 1px 1px);
+    clip: rect(1px, 1px, 1px, 1px);
+    opacity: 0;
+  }
+  
+  .wrapper label {
+    position: relative;
+    float: right;
+    color: #C8C8C8 !important;
+    margin: 0 !important;
+  }
+  
+  .wrapper label:before {
+    margin: 5px !important;
+    content: "\f005" !important;
+    font-family: FontAwesome;
+    display: inline-block !important;
+    font-size: 1.5em;
+    color: #ccc !important;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    border: 0 !important;
+    background-color: transparent !important;
+  }
+  
+  .wrapper input:checked ~ label:before {
+    color: #FFC107 !important;
+  }
+  
+  .wrapper label:hover ~ label:before {
+    color: #ffdb70 !important;
+  }
+  
+  .wrapper label:hover:before {
+    color: #FFC107 !important;
+  }

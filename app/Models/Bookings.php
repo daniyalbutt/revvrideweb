@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Bookings extends Model
 {
@@ -21,6 +22,25 @@ class Bookings extends Model
         'booking_status',
         'adults',
         'rental_availability_id',
-        'total'
+        'total',
+        'transaction_id'
     ];
+
+    public function getBookType(){
+        return $this->hasOne($this->bookable_type, 'id', 'bookable_id');
+    }
+
+    public function checkPast(){
+        if($this->datetime != null){
+            $otherDate = Carbon::parse($this->datetime);
+            $nowDate = Carbon::now();
+            $result = $nowDate->gt($otherDate);
+            return $result;
+        }else{
+            $otherDate = Carbon::parse($this->getBookType->end_date);
+            $nowDate = Carbon::now();
+            $result = $nowDate->gt($otherDate);
+            return $result;
+        }
+    }
 }

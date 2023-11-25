@@ -45,26 +45,13 @@
                             </div>
                         </div>
                         <ul class="index-slider mb-30">
+                            @foreach($inners->Images as $key => $value)
                             <li>
                                 <div class="sports-detail-img">
-                                    <img src="{{ asset('storage/' . $inners->Images) }}" alt="">
+                                    <img src="{{ $value->image }}" alt="">
                                 </div>
                             </li>
-                            {{-- <li>
-                                <div class="sports-detail-img">
-                                    <img src="{{ asset('assets/images/dt1.jpg') }}" alt="">
-                                </div>
-                            </li>
-                            <li>
-                                <div class="sports-detail-img">
-                                    <img src="{{ asset('assets/images/dt1.jpg') }}" alt="">
-                                </div>
-                            </li>
-                            <li>
-                                <div class="sports-detail-img">
-                                    <img src="{{ asset('assets/images/dt1.jpg') }}" alt="">
-                                </div>
-                            </li> --}}
+                            @endforeach
                         </ul>
                         <div class="detail-content mb-20">
                             <h3 class="third-hd mb-20">Description</h3>
@@ -177,177 +164,130 @@
                                 <div class="price-filter detail-filter-content">
                                     <h6 class="mb-10">PRICE</h6>
                                     <h3>${{ $inners->price }}+Tax / <span>Per Hour</span></h3>
+                                    <input type="hidden" id="get_price" value="{{ $inners->price }}">
+                                    <div class="date-wrapper">
+                                        <ul>
+                                            <li><strong>Start Date</strong> <span>{{ date('d M, Y h:i A', strtotime($inners->start_date)) }}</span></li>
+                                            <li><strong>End Date</strong> <span>{{ date('d M, Y h:i A', strtotime($inners->end_date)) }}</span></li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </li>
-                            <!-- <li>
-                                                                                            <div class="check-availibility detail-filter-content">
-                                                                                               <h6 class="mb-10">CHECK AVAILABILITY</h6>
-                                                                                               <div class="ui calendar date-pick mb-10" id="example1">
-                                                                                                  <div class="ui input input-field left icon">
-                                                                                                     <i class="calendar icon"></i>
-                                                                                                     <input type="text" placeholder="Date">
-                                                                                                  </div>
-                                                                                               </div>
-                                                                                               <div class="chcek-in-check-out mb-10">
-                                                                                                  <div>
-                                                                                                     <div class="ui calendar mb-10" id="example3">
-                                                                                                        <div class="ui input input-field left icon">
-                                                                                                           <i class="time icon"></i>
-                                                                                                           <input type="text" placeholder="Check In">
-                                                                                                        </div>
-                                                                                                     </div>
-                                                                                                  </div>
-                                                                                                  <div>
-                                                                                                     <div class="ui calendar mb-10" id="example4">
-                                                                                                        <div class="ui input input-field left icon">
-                                                                                                           <i class="time icon"></i>
-                                                                                                           <input type="text" placeholder="Check Out">
-                                                                                                        </div>
-                                                                                                     </div>
-                                                                                                  </div>
-                                                                                               </div>
-                                                                                               <p class="mb-10">Provide additional dates if your dates are flexible and you have other possible options.</p>
-                                                                                               <div class="ui calendar date-pick mb-20" id="example2">
-                                                                                                  <div class="ui input input-field left icon">
-                                                                                                     <i class="calendar icon"></i>
-                                                                                                     <input type="text" placeholder="Date">
-                                                                                                  </div>
-                                                                                               </div>
-                                                                                               <div class="check-btn"><a href="#" class="btn-a">Check</a></div>
-                                                                                            </div>
-                                                                                         </li> -->
-                            <li>
-                                <div class="additional-box detail-filter-content">
-                                    <h3 class="mb-20">GROUP SIZE <img src="{{ asset('assets/images/info-icon.png') }}"
-                                            alt="">
-                                    </h3>
-                                    <div class="product-and-counter mb-10">
-                                        <div class="detail-filter-content">
-                                            <span>Adults</span>
-                                        </div>
-                                        <div>
-                                            <div class="quantity">
-                                                <button class="quantity__minus"><i class="fas fa-minus"></i></button>
-                                                <input name="quantity" type="number" class="quantity__input"
-                                                    value="1">
-                                                <button class="quantity__plus"><i class="fas fa-plus"></i></button>
+                            <form action="{{ route('user.booking') }}" method="post">
+                                @csrf
+                                <input type="hidden" name="bookable_type" value="tour">
+                                <input type="hidden" name="product_id" id="product_id" value="{{ $inners->id }}">
+                                <input type="hidden" name="form_total_price" value="{{ $inners->price }}" id="form-total-price">
+                                <input type="hidden" name="form_qty" value="1" id="form-qty">
+                                <input type="hidden" name="form_insurance" value="0" id="form-insurance">
+                                <li>
+                                    <div class="additional-box detail-filter-content">
+                                        <h3 class="mb-20">GROUP SIZE <img src="{{ asset('assets/images/info-icon.webp') }}"
+                                                alt="">
+                                        </h3>
+                                        <div class="product-and-counter mb-10">
+                                            <div class="detail-filter-content">
+                                                <span>Adults</span>
+                                            </div>
+                                            <div>
+                                                <div class="quantity" data-name="group">
+                                                    <button class="quantity__minus" type="button"><i class="fas fa-minus"></i></button>
+                                                    <input name="adult_quantity" type="number" class="quantity__input person-qty" value="1">
+                                                    <button class="quantity__plus" type="button"><i class="fas fa-plus"></i></button>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="product-and-counter mb-10">
-                                        <div class="detail-filter-content">
-                                            <span>Seniors</span>
-                                        </div>
-                                        <div>
-                                            <div class="quantity">
-                                                <button class="quantity__minus"><i class="fas fa-minus"></i></button>
-                                                <input name="quantity" type="number" class="quantity__input"
-                                                    value="1">
-                                                <button class="quantity__plus"><i class="fas fa-plus"></i></button>
+                                        <div class="product-and-counter mb-10">
+                                            <div class="detail-filter-content">
+                                                <span>Children</span>
+                                            </div>
+                                            <div>
+                                                <div class="quantity" data-name="group">
+                                                    <button class="quantity__minus" type="button"><i class="fas fa-minus"></i></button>
+                                                    <input name="children_quantity" type="number" class="quantity__input person-qty" value="0">
+                                                    <button class="quantity__plus" type="button"><i class="fas fa-plus"></i></button>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="product-and-counter mb-10">
-                                        <div class="detail-filter-content">
-                                            <span>Children</span>
-                                        </div>
-                                        <div>
-                                            <div class="quantity">
-                                                <button class="quantity__minus"><i class="fas fa-minus"></i></button>
-                                                <input name="quantity" type="number" class="quantity__input"
-                                                    value="1">
-                                                <button class="quantity__plus"><i class="fas fa-plus"></i></button>
+                                        <div class="product-and-counter mb-10">
+                                            <div class="detail-filter-content">
+                                                <span>Infants</span>
+                                            </div>
+                                            <div>
+                                                <div class="quantity" data-name="group">
+                                                    <button class="quantity__minus" type="button"><i class="fas fa-minus"></i></button>
+                                                    <input name="infants_quantity" type="number" class="quantity__input person-qty" value="0">
+                                                    <button class="quantity__plus" type="button"><i class="fas fa-plus"></i></button>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="product-and-counter mb-10">
-                                        <div class="detail-filter-content">
-                                            <span>Infants</span>
-                                        </div>
-                                        <div>
-                                            <div class="quantity">
-                                                <button class="quantity__minus"><i class="fas fa-minus"></i></button>
-                                                <input name="quantity" type="number" class="quantity__input"
-                                                    value="1">
-                                                <button class="quantity__plus"><i class="fas fa-plus"></i></button>
+                                        <div class="product-and-counter">
+                                            <div class="detail-filter-content">
+                                                <h6>Total:</h6>
+                                            </div>
+                                            <div class="detail-filter-content">
+                                                <h6><strong class="person-total">1</strong> Person</h6>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="product-and-counter">
-                                        <div class="detail-filter-content">
-                                            <h6>Total:</h6>
-                                        </div>
-                                        <div class="detail-filter-content">
-                                            <h6>01 Person</h6>
-                                        </div>
-                                    </div>
 
-                                </div>
-                            </li>
-                            <li>
-                                <div class="insurance-box detail-filter-content">
-                                    <h3 class="mb-10">DO YOU WANT INSURANCE?</h3>
-                                    <h6 class="mb-10">Insurance amount: $50 </h6>
-                                    <div class="checkboxes">
-                                        <div>
-                                            <input type="checkbox" id="yes" value="YES">
-                                            <label for="yes">YES</label>
-                                        </div>
-                                        <div>
-                                            <input type="checkbox" id="no" value="NO">
-                                            <label for="no">NO</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="insurance-box detail-filter-content">
+                                        <h3 class="mb-10">DO YOU WANT INSURANCE?</h3>
+                                        <h6 class="mb-10">Insurance amount: $50 </h6>
+                                        <div class="checkboxes">
+                                            <div>
+                                                <input type="radio" id="yes" value="YES" name="insurance">
+                                                <label for="yes">YES</label>
+                                            </div>
+                                            <div>
+                                                <input type="radio" id="no" value="NO" name="insurance" checked>
+                                                <label for="no">NO</label>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="insurance-box detail-filter-content">
-                                    <h3 class="mb-10">WHAT'S INCLUDED</h3>
-                                    <ul class="include-list">
-                                        <li>
-                                            <p>{{ $inners->whats_include }}</p>
-                                        </li>
-                                        {{-- <li>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.</p>
-                                        </li>
-                                        <li>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.</p>
-                                        </li>
-                                        <li>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.</p>
-                                        </li> --}}
-                                    </ul>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="price-box detail-filter-content">
-                                    <h3 class="mb-20">PRICE DETAILS </h3>
-                                    <ul class="price-list mb-20">
-                                        <li>
-                                            <div class="product-and-counter">
-                                                <div class="detail-filter-content">
-                                                    <span>Persons</span>
-                                                </div>
-                                                <div class="detail-filter-content">
-                                                    <span>01</span>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="product-and-counter">
-                                                <div class="detail-filter-content">
-                                                    <h6>TOTAL PACKAGE:</h6>
-                                                </div>
-                                                <div class="detail-filter-content">
-                                                    <h6>${{ $inners->price }}</h6>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                    <div class="price-btn check-btn"><a href="booking.php" class="btn-a">BOOK NOW</a>
+                                </li>
+                                <li>
+                                    <div class="insurance-box detail-filter-content">
+                                        <h3 class="mb-10">WHAT'S INCLUDED</h3>
+                                        <ul class="include-list">
+                                            <li>
+                                                <p>{{ $inners->whats_include }}</p>
+                                            </li>
+                                        </ul>
                                     </div>
-                                </div>
-                            </li>
+                                </li>
+                                <li>
+                                    <div class="price-box detail-filter-content">
+                                        <h3 class="mb-20">PRICE DETAILS </h3>
+                                        <ul class="price-list mb-20">
+                                            <li>
+                                                <div class="product-and-counter">
+                                                    <div class="detail-filter-content">
+                                                        <span>{{ $inners->title }} <strong id="title_total">x 1</strong></span>
+                                                    </div>
+                                                    <div class="detail-filter-content">
+                                                        <span>${{ $inners->price }}</span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="product-and-counter">
+                                                    <div class="detail-filter-content">
+                                                        <h6>TOTAL PACKAGE:</h6>
+                                                    </div>
+                                                    <div class="detail-filter-content">
+                                                        <h6>$<strong id="total_price">{{ $inners->price }}</strong></h6>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                        <div class="price-btn check-btn"><button type="submit" class="btn-a w-100">BOOK NOW</button>
+                                        </div>
+                                    </div>
+                                </li>
+                            </form>
                         </ul>
                     </div>
                 </div>
@@ -396,75 +336,27 @@
                     </div>
 
                     <ul class="detail-review-list">
+                        @foreach($inners->get_reviews as $key => $reviews)
                         <li>
                             <div class="review-box">
                                 <div class="review-box-img-and-content mb-20">
                                     <div class="review-box-img">
-                                        <img src="{{ asset('assets/images/r1.png') }}" alt="">
+                                        <img src="{{ $reviews->getUser->display_picture }}" alt="">
                                     </div>
                                     <div class="review-box-content">
                                         <div><i class="fas fa-star"></i><i class="fas fa-star"></i><i
-                                                class="fas fa-star"></i><i class="fas fa-star"></i><i
-                                                class="fas fa-star"></i></div>
-                                        <h6>Dominic Dawn</h6>
-                                        <span>July 25, 2023</span>
+                                            class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                            class="fas fa-star"></i></div>
+                                        <h6>{{ $reviews->getUser->first_name }} {{ $reviews->getUser->last_name }}</h6>
+                                        <span>{{ date('M d, Y', strtotime($reviews->created_at)) }}</span>
                                     </div>
                                 </div>
                                 <div class="review-box-content">
-                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-                                        Ipsum has been the industry's standard dummy text ever since the 1500s, when an
-                                        unknown printer took a galley of type and scrambled it to make a type specimen book.
-                                        It has survived not only five centuries, but also the leap into electronic
-                                        typesetting, </p>
+                                    <p>{{ $reviews->comment }}</p>
                                 </div>
                             </div>
                         </li>
-                        <li>
-                            <div class="review-box">
-                                <div class="review-box-img-and-content mb-20">
-                                    <div class="review-box-img">
-                                        <img src="{{ asset('assets/images/r2.png') }}" alt="">
-                                    </div>
-                                    <div class="review-box-content">
-                                        <div><i class="fas fa-star"></i><i class="fas fa-star"></i><i
-                                                class="fas fa-star"></i><i class="fas fa-star"></i><i
-                                                class="fas fa-star"></i></div>
-                                        <h6>Dominic Dawn</h6>
-                                        <span>July 25, 2023</span>
-                                    </div>
-                                </div>
-                                <div class="review-box-content">
-                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-                                        Ipsum has been the industry's standard dummy text ever since the 1500s, when an
-                                        unknown printer took a galley of type and scrambled it to make a type specimen book.
-                                        It has survived not only five centuries, but also the leap into electronic
-                                        typesetting, </p>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="review-box">
-                                <div class="review-box-img-and-content mb-20">
-                                    <div class="review-box-img">
-                                        <img src="{{ asset('assets/images/r3.png') }}" alt="">
-                                    </div>
-                                    <div class="review-box-content">
-                                        <div><i class="fas fa-star"></i><i class="fas fa-star"></i><i
-                                                class="fas fa-star"></i><i class="fas fa-star"></i><i
-                                                class="fas fa-star"></i></div>
-                                        <h6>Dominic Dawn</h6>
-                                        <span>July 25, 2023</span>
-                                    </div>
-                                </div>
-                                <div class="review-box-content">
-                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-                                        Ipsum has been the industry's standard dummy text ever since the 1500s, when an
-                                        unknown printer took a galley of type and scrambled it to make a type specimen book.
-                                        It has survived not only five centuries, but also the leap into electronic
-                                        typesetting, </p>
-                                </div>
-                            </div>
-                        </li>
+                        @endforeach
                     </ul>
                 </div>
             </div>
@@ -500,8 +392,13 @@
     </section>
 
 @endsection
-
+@push('script')
 <script>
+    var product_price = parseFloat($('#get_price').val());
+    var total_price = parseFloat($('#get_price').val());
+    var addon_price = 0;
+    var insurance_amount = 0;
+
     function create_custom_dropdowns() {
         $('select').each(function(i, select) {
             if (!$(this).next().hasClass('dropdown')) {
@@ -595,3 +492,4 @@
         create_custom_dropdowns();
     });
 </script>
+@endpush

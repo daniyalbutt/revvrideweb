@@ -62,6 +62,8 @@ class VendorRentalsController extends Controller
         $data->price = $request->price;
         $data->price_type = $request->price_type;
         $data->locations = $request->locations;
+        $data->locations_lat = $request->locations_lat;
+        $data->locations_lng = $request->locations_lng;
         $data->desc = $request->desc;
         $data->capacity = $request->capacity;
         $data->skills = $request->skills;
@@ -149,6 +151,8 @@ class VendorRentalsController extends Controller
         $data->price = $request->price;
         $data->price_type = $request->price_type;
         $data->locations = $request->locations;
+        $data->locations_lat = $request->locations_lat;
+        $data->locations_lng = $request->locations_lng;
         $data->desc = $request->desc;
         $data->capacity = $request->capacity;
         $data->skills = $request->skills;

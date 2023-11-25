@@ -6,7 +6,7 @@
         <a href="{{ route('user.profile') }}" class="{{ request()->routeIs('user.profile') ? 'active' : '' }}"><i class="fa-solid fa-money-bill"></i> Profile</a>
     </li>
     <li>
-        <a href="{{ route('user.booking') }}" class="{{ request()->routeIs('user.booking') ? 'active' : '' }}"><i class="fa-solid fa-calendar-days"></i> My Booking</a>
+        <a href="{{ route('user.booking.get') }}" class="{{ request()->routeIs('user.booking.get') ? 'active' : '' }}"><i class="fa-solid fa-calendar-days"></i> My Booking</a>
     </li>
     <li>
         <a href=""><i class="fa-solid fa-credit-card"></i> Payment</a>

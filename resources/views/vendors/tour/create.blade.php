@@ -78,8 +78,10 @@
                                         <input type="datetime-local" id="end_date" name="end_date" class="form-control" required>
                                     </div>
                                     <div class="form-group col-md-12">
-                                        <label id="locations">Location</label>
-                                        <input type="text" class="form-control" name="locations" id="locations" required>
+                                        <label for="locations">Location</label>
+                                        <input type="text" class="form-control" name="locations" id="locations" autocomplete="on" runat="server" required>
+                                        <input type="hidden" id="locations_lat" name="locations_lat" />
+                                        <input type="hidden" id="locations_lng" name="locations_lng" />
                                     </div>
                                     <div class="form-group col-md-12">
                                         <label>Image</label>
@@ -141,5 +143,18 @@
             $('.dropify').dropify();
             $("#repeater").createRepeater();
         })
+    </script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABwtgNHhRqnfw_sXX1-x-f0LQNm4lxk6s&libraries=places"></script>
+    <script>
+        function initialize() {
+        var input = document.getElementById('locations');
+        var autocomplete = new google.maps.places.Autocomplete(input);
+            google.maps.event.addListener(autocomplete, 'place_changed', function () {
+                var place = autocomplete.getPlace();
+                document.getElementById('locations_lat').value = place.geometry.location.lat();
+                document.getElementById('locations_lng').value = place.geometry.location.lng();
+            });
+        }
+        google.maps.event.addDomListener(window, 'load', initialize);
     </script>
 @endpush

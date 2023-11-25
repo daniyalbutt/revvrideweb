@@ -76,8 +76,7 @@
 
                                                 </div>
                                                 @if (count($tour->Images) != 0)
-                                                    <img src="{{ asset('storage/' . $tour->Images[0]->image) }}"
-                                                        alt="{{ $tour->title }}">
+                                                    <img src="{{ $tour->Images[0]->image }}" alt="{{ $tour->title }}">
                                                 @endif
                                             </div>
                                             <div class="best-spots-box-content">

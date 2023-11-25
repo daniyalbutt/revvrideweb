@@ -250,6 +250,7 @@
                         </li>
                         <li>
                             <div class="additional-box detail-filter-content">
+                                @if($cart['bookable_type'] == 'rental')
                                 <h6 class="mb-20">Date / Time</h6>
                                 <div class="detail-filter-content mb-10">
                                     <span>Date: {{ $cart['datetime'] }}</span>
@@ -264,6 +265,7 @@
                                 <div class="detail-filter-content mb-20">
                                     <span>Duration: {{ $diff->h }} hr {{ $diff->i }} minutes</span>
                                 </div>
+                                @endif
                                 <h6 class="mb-20">Account Details</h6>
                                 <div class="detail-filter-content mb-10">
                                     <span>{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</span>
@@ -338,11 +340,12 @@
                                         </div>
                                     </li>
                                     @endif
+                                    @if($cart['bookable_type'] == 'rental')
                                     @foreach($cart['addons'] as $key => $addons)
                                     <li>
                                         <div class="product-and-counter">
                                             <div class="detail-filter-content">
-                                                <span>{{ $addons['name'] }}</span>
+                                                <span>{{ $addons['name'] }} x {{ $addons['quantity'] }}</span>
                                             </div>
                                             <div class="detail-filter-content">
                                                 <span>${{ $addons['price'] }}</span>
@@ -350,6 +353,7 @@
                                         </div>
                                     </li>
                                     @endforeach
+                                    @endif
                                     <li>
                                         <div class="product-and-counter">
                                             <div class="detail-filter-content">
