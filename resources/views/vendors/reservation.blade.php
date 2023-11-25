@@ -57,7 +57,9 @@
                                             <td>{{ $item->booking_code }}</td>
                                             <td>${{ $item->total }}</td>
                                             <td><span class="badge badge-info">{{ strtoupper($item->getBookType->getTable()) }}</span> </td>
-                                            <td><button class="btn-primary btn">View</button></td>
+                                            <td>
+                                                <a href="{{ route('vendor.reservation.detail', $item->id ) }}" class="btn btn-secondary btn-sm" title="View Booking"><i class="fa-solid fa-eye"></i></a>
+                                            </td>
                                         </tr>
                                     @endforeach
 

@@ -91,6 +91,7 @@ Route::group(['prefix' => 'vendor', 'middleware' => ['is_vendor', 'auth']], func
     Route::post('update-location',[VendorToursController::class,'locationupdate'])->name('vendor.location.update');
 
     Route::get('reservations',[VendorController::class,'reservations'])->name('vendor.reservations');
+    Route::get('reservation/{id}',[VendorController::class,'reservationDetail'])->name('vendor.reservation.detail');
 
 });
 

@@ -26,6 +26,11 @@ class VendorController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
+    public function reservationDetail($id){
+        $data = Bookings::where('id',$id)->with('bookable')->first();
+
+        return view('vendors.bookingdetail',compact('data'));
+    }
     public function reservations()
     {
         $orders = Bookings::whereHas('bookable', function ($query) {
