@@ -95,6 +95,7 @@ Route::group(['prefix' => 'vendor', 'middleware' => ['is_vendor', 'auth']], func
     Route::get('withdraw', [VendorController::class,'withdraw'])->name('vendor.withdraw');
     Route::get('withdraw/add', [VendorController::class,'withdrawCreate'])->name('vendor.withdraw.add');
     Route::post('withdraw/store', [VendorController::class,'withdrawStore'])->name('vendor.withdraw.store');
+    Route::post('payments', [VendorController::class,'payments'])->name('vendor.withdraw.store');
 
 });
 
