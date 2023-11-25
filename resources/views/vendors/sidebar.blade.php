@@ -12,7 +12,7 @@
         <a href="{{ route('vendor.reservations') }}" class="{{ request()->routeIs('vendor.reservations') ? 'active' : '' }}"><i class="fa-solid fa-calendar-days"></i> Reservations</a>
     </li>
     <li>
-        <a href=""><i class="fa-solid fa-credit-card"></i> Payment</a>
+        <a href="{{ route('vendor.payment') }}" class="{{ request()->routeIs('vendor.payment') ? 'active' : '' }}"><i class="fa-solid fa-credit-card"></i> Payment</a>
     </li>
     <li>
         <a href="{{ route('vendor.withdraw') }}" class="{{ request()->routeIs('vendor.withdraw') || request()->routeIs('vendor.withdraw.*') ? 'active' : '' }}"><i class="fa-solid fa-money-check-dollar"></i> Withdraw a Request</a>
