@@ -117,8 +117,8 @@
                                         <ul class="user-profile-list">
                                             <li><a href="{{ route('vendor.dashboard') }}">Dashboard</a></li>
                                             <li><a href="{{ route('vendor.profile') }}">Profile</a></li>
-                                            <li><a href="chat.php">Messages</a></li>
-                                            <li><a href="my-bookings.php">Bookings</a></li>
+                                            <li><a href="{{ route('vendor.rental.index') }}">Rentals</a></li>
+                                            <li><a href="{{ route('vendor.tour.index') }}">Tours</a></li>
                                             <li><a href="{{ route('logout') }}"
                                                     onclick="event.preventDefault();document.getElementById('logout-form').submit();">Logout</a>
                                             </li>

@@ -56,15 +56,15 @@
                                 <div class="form-group">
                                     <label for="">Rating</label>
                                     <div class="wrapper">
-                                        <input type="checkbox" id="st1" value="1" />
+                                        <input type="checkbox" id="st1" value="5" name="rating" />
                                         <label for="st1"></label>
-                                        <input type="checkbox" id="st2" value="2" />
+                                        <input type="checkbox" id="st2" value="4" name="rating"/>
                                         <label for="st2"></label>
-                                        <input type="checkbox" id="st3" value="3" />
+                                        <input type="checkbox" id="st3" value="3" name="rating"/>
                                         <label for="st3"></label>
-                                        <input type="checkbox" id="st4" value="4" />
+                                        <input type="checkbox" id="st4" value="2" name="rating"/>
                                         <label for="st4"></label>
-                                        <input type="checkbox" id="st5" value="5" />
+                                        <input type="checkbox" id="st5" value="1" name="rating"/>
                                         <label for="st5"></label>
                                     </div>
                                 </div>

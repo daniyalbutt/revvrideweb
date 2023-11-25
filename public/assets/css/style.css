@@ -5669,3 +5669,9 @@ ul.detail-filter-list form > li {
   .wrapper label:hover:before {
     color: #FFC107 !important;
   }
+  .review-box-img img {
+    width: 65px;
+    height: 65px;
+    border-radius: 50px;
+    object-fit: cover;
+}

@@ -40,12 +40,11 @@
                     </div>
                     <div class="table-responsive">
                         <table class="table table-stripped">
-                            <thead>
+                            <thead class="thead-dark">
                                 <tr>
                                     <th>Name</th>
                                     <th>Time</th>
                                     <th>ID Number</th>
-                                    <th>Insurance</th>
                                     <th>Cost</th>
                                     <th>Type</th>
                                     <th>Action</th>
@@ -53,13 +52,16 @@
                             </thead>
                             <tbody>
                                 @foreach(Auth::user()->get_booking as $key => $booking)
+                                @php
+                                $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $booking->getBookType->title)));
+                                @endphp
                                 <tr>
                                     <td>
                                         @if($booking->getBookType != null)
                                         <div class="content-wrapper">
                                             <img src="{{ $booking->getBookType->Images[0]->image }}" alt="" width="120px">
                                             <div class="content-wrapper-head">
-                                                <h4>{{ $booking->getBookType->title }}</h4>
+                                                <h4><a href="{{ $booking->bookable_type == 'App\Models\Rentals' ? route('sportinner', ['slug' => $slug, 'id' => $booking->getBookType->id]) : route('tourinner', ['slug' => $slug, 'id' => $booking->getBookType->id]) }}" target="_blank">{{ $booking->getBookType->title }}</a></h4>
                                                 <span><i class="fa-solid fa-location-dot"></i> {{ $booking->getBookType->locations }}</span>
                                             </div>
                                         </div>
@@ -80,7 +82,6 @@
                                         @endif
                                     </td>
                                     <td>{{ $booking->booking_code }}</td>
-                                    <td>${{ $booking->insurance_amount }}</td>
                                     <td>${{ $booking->total }}</td>
                                     <td>
                                         @if($booking->bookable_type == 'App\Models\Rentals')

@@ -270,12 +270,14 @@ class UserController extends Controller
             $data->user_id = Auth::user()->id;
             $data->rental_id = $request->bookable_id;
             $data->comments = $request->comments;
+            $data->rating = $request->rating;
             $data->save();
         }else{
             $data = new ToursReviews();
             $data->user_id = Auth::user()->id;
             $data->tour_id = $request->bookable_id;
             $data->comment = $request->comments;
+            $data->rating = $request->rating;
             $data->save();
         }
         Session::flash('success', 'Review Added Successful!');

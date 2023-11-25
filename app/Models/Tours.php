@@ -18,6 +18,6 @@ class Tours extends Model
 
     public function get_reviews()
     {
-        return $this->hasMany(ToursReviews::class, 'tour_id', 'id');
+        return $this->hasMany(ToursReviews::class, 'tour_id', 'id')->orderBy('id', 'desc');
     }
 }

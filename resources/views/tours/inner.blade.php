@@ -341,12 +341,18 @@
                             <div class="review-box">
                                 <div class="review-box-img-and-content mb-20">
                                     <div class="review-box-img">
+                                        @if($reviews->getUser->display_picture != null)
                                         <img src="{{ $reviews->getUser->display_picture }}" alt="">
+                                        @else
+                                        <img src="{{ asset('assets/images/dummy.jpg') }}" alt="">
+                                        @endif
                                     </div>
                                     <div class="review-box-content">
-                                        <div><i class="fas fa-star"></i><i class="fas fa-star"></i><i
-                                            class="fas fa-star"></i><i class="fas fa-star"></i><i
-                                            class="fas fa-star"></i></div>
+                                        <div>
+                                            @for($i = 0; $i < $reviews->rating; $i++)
+                                            <i class="fas fa-star"></i>
+                                            @endfor
+                                        </div>
                                         <h6>{{ $reviews->getUser->first_name }} {{ $reviews->getUser->last_name }}</h6>
                                         <span>{{ date('M d, Y', strtotime($reviews->created_at)) }}</span>
                                     </div>

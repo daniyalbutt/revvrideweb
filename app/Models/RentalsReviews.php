@@ -15,7 +15,8 @@ class RentalsReviews extends Model
     protected $fillable = [
         'user_id',
         'rental_id',
-        'comments'
+        'comments',
+        'rating'
     ];
 
     public function getUser(){

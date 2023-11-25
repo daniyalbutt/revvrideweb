@@ -31,7 +31,7 @@ class Rentals extends Model
 
     public function reviews()
     {
-        return $this->hasMany(RentalsReviews::class, 'rental_id', 'id');
+        return $this->hasMany(RentalsReviews::class, 'rental_id', 'id')->orderBy('id', 'desc');
     }
 
 }
