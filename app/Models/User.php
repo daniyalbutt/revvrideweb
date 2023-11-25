@@ -33,9 +33,11 @@ class User extends Authenticatable
         'license_number',
         'license_file',
         'user_type',
-        'user_type',
         'password',
-        'stripe_cus'
+        'stripe_cus',
+        'lat',
+        'lng',
+        'location'
     ];
 
     /**

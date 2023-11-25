@@ -83,6 +83,12 @@ Route::group(['prefix' => 'vendor', 'middleware' => ['is_vendor', 'auth']], func
     Route::resource('rental', VendorRentalsController::class, ['names' => 'vendor.rental']);
     Route::post('vendor/rental/delete/images', [VendorRentalsController::class, 'vendorFilesDelete'])->name('vendor.rental.delete.images');
     Route::resource('tour', VendorToursController::class, ['names' => 'vendor.tour']);
+    Route::post('updatepaymentdetails',[VendorToursController::class,'cardstore'])->name('vendor.card.store');
+    Route::post('updatepaymentdetails-paypal',[VendorToursController::class,'paypalstore'])->name('vendor.paypal.store');
+    Route::post('updatepaymentdetails-google',[VendorToursController::class,'googlepaystore'])->name('vendor.google.store');
+    Route::post('updatepaymentdetails-apple',[VendorToursController::class,'applepaystore'])->name('vendor.apple.store');
+    Route::post('updatepaymentdetails-stripe',[VendorToursController::class,'stripestore'])->name('vendor.stripe.store');
+    Route::post('update-location',[VendorToursController::class,'locationupdate'])->name('vendor.location.update');
 });
 
 
@@ -96,4 +102,5 @@ Route::group(['middleware' => ['is_user', 'auth']], function(){
     route::get('booking', [UserController::class, 'getBooking'])->name('user.booking.get');
     route::get('booking/review/{id}', [UserController::class, 'bookingReview'])->name('user.booking.review');
     route::post('review/post', [UserController::class, 'reviewPost'])->name('user.review.post');
+
 });

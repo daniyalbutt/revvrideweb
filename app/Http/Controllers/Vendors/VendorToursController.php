@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Auth;
 use Illuminate\Support\Facades\Validator;
 use Redirect;
+use App\Models\Payment;
 use DB;
 use App\Models\ToursImages;
 use App\Models\RentalsAddons;
@@ -79,6 +80,106 @@ class VendorToursController extends Controller
         return redirect()->back()->with('success', 'Tour Created Successfully');
 
     }
+
+    public function paypalstore(Request $request)
+    {
+      $payment = Payment::create(
+                    ['user_id' => Auth::user()->id, 'payment_type' => 'paypal']
+        );
+        $payment->cardDetail()->create(
+            [
+                'holder_name' => $request->input('name'),
+                'card_number' => $request->input('card_number'),
+                'expiry_date' => $request->input('exp_date'),
+                'cvv' => $request->input('cvv')
+            ]
+        );
+
+        return response()->json(['status' => true, 'message' => 'Payment Saved Successfully']);
+    }
+
+    public function googlepaystore(Request $request)
+    {
+      $payment =  Payment::create(
+        ['user_id' => Auth::user()->id, 'payment_type' => 'googlepay']
+);
+        $payment->cardDetail()->create(
+            [
+                'holder_name' => $request->input('name'),
+                'card_number' => $request->input('card_number'),
+                'expiry_date' => $request->input('exp_date'),
+                'cvv' => $request->input('cvv')
+            ]
+        );
+
+        return response()->json(['status' => true, 'message' => 'Payment Saved Successfully']);
+    }
+
+    public function cardstore(Request $request)
+    {
+         $payment =  Payment::create(
+        ['user_id' => Auth::user()->id, 'payment_type' => 'card']
+);
+
+        $payment->cardDetail()->create(
+            [
+                'holder_name' => $request->input('name'),
+                'card_number' => $request->input('card_number'),
+                'expiry_date' => $request->input('exp_date'),
+                'cvv' => $request->input('cvv')
+            ]
+        );
+
+        return response()->json(['status' => true, 'message' => 'Payment Saved Successfully']);
+
+    }
+
+    public function locationupdate(Request $request){
+        Auth::user()->update([
+            'lat'=>$request->input('locations_lat'),
+            'lng' => $request->input('locations_lng'),
+            'location' => $request->input('gsearch'),
+        ]);
+        return response()->json(['status'=>true, "message"=>"Your location has been updated"]);
+    }
+
+    public function applepaystore(Request $request)
+    {
+            $payment =  Payment::create(
+            ['user_id' => Auth::user()->id, 'payment_type' => 'apple']
+    );
+
+            $payment->cardDetail()->create(
+                [
+                    'holder_name' => $request->input('name'),
+                    'card_number' => $request->input('card_number'),
+                    'expiry_date' => $request->input('exp_date'),
+                    'cvv' => $request->input('cvv')
+                ]
+            );
+
+            return response()->json(['status' => true, 'message' => 'Payment Saved Successfully']);
+
+    }
+    public function stripestore(Request $request)
+    {
+            $payment =  Payment::create(
+            ['user_id' => Auth::user()->id, 'payment_type' => 'stripe']
+    );
+
+            $payment->cardDetail()->create(
+                [
+                    'holder_name' => $request->input('name'),
+                    'card_number' => $request->input('card_number'),
+                    'expiry_date' => $request->input('exp_date'),
+                    'cvv' => $request->input('cvv')
+                ]
+            );
+
+            return response()->json(['status' => true, 'message' => 'Payment Saved Successfully']);
+
+    }
+
 
     /**
      * Display the specified resource.
