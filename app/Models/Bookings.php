@@ -55,4 +55,8 @@ class Bookings extends Model
         return $this->hasMany(BookingAddons::class, 'booking_id', 'id');
     }
 
+    public function getTotalAmount(){
+        
+    }
+
 }

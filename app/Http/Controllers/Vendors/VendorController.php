@@ -8,6 +8,7 @@ use DB;
 use Auth;
 use App\Models\{User, Bookings};
 use App\Models\UserCategories;
+use Carbon\Carbon;
 
 class VendorController extends Controller
 {
@@ -116,5 +117,17 @@ class VendorController extends Controller
         )
         ->first();
         return view('vendors.dashboard', compact('data'));
+    }
+
+    public function withdraw(){
+        return view('vendors.withdraw.index');
+    }
+
+    public function withdrawCreate(){
+        $now = Carbon::now();
+        $totalAmount = Bookings::whereHas('bookable', function ($query) {
+            $query->where('user_id', Auth::user()->id);
+        })->sum('total');
+        return view('vendors.withdraw.create', compact('totalAmount'));
     }
 }
