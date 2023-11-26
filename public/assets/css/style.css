@@ -5684,3 +5684,8 @@ ul.detail-filter-list form > li {
     display: block;
     font-size: 15px;
 }
+input#gsearch {
+    padding: 0;
+    height: 56px;
+    border-radius: 0px;
+}

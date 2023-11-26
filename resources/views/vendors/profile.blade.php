@@ -9,15 +9,15 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <style>
-   .map {
-    width: 100%;
-    height: 100vh;
-}
+    .map {
+        width: 66%;
+        height: 451px;
+        margin: 0 auto;
+    }
 
 div#map {
-    position: absolute;
     width: 100%;
-    height: 100vh;
+    height: 100%;
 }
     </style>
 @endpush
@@ -256,8 +256,7 @@ div#map {
                                     <div class="contact-form-fields registration-form-fields justify-content-center">
                                         <div class="contact-form-field registration-form-field search-field">
 
-                                            <input type="search" id="gsearch" name="gsearch"
-                                                value="{{ Auth::user()->location }}">
+                                            <input type="search" id="gsearch" name="gsearch" value="{{ Auth::user()->location }}" class="form-control">
                                             <i class="fas fa-magnifying-glass"></i>
 
 
@@ -285,7 +284,6 @@ div#map {
                                         </div>
                                     </div>
                                     <div class="map">
-
                                         <div id="map"></div>
                                     </div>
                                     <div id="infowindow-content">
@@ -1060,7 +1058,6 @@ div#map {
             const input = document.getElementById("gsearch");
             const searchBox = new google.maps.places.SearchBox(input);
 
-            map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
             // Bias the SearchBox results towards current map's viewport.
             map.addListener("bounds_changed", () => {
                 searchBox.setBounds(map.getBounds());
