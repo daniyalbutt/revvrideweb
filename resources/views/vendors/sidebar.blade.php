@@ -14,4 +14,7 @@
     <li>
         <a href=""><i class="fa-solid fa-credit-card"></i> Payment</a>
     </li>
+    <li>
+        <a href="{{ route('vendor.withdraw') }}"><i class="fa-solid fa-money-check-dollar"></i> Withdraw a Request</a>
+    </li>
 </ul>
