@@ -69,13 +69,13 @@
                                     </td>
                                     <td>
                                         @if($booking->bookable_type == 'App\Models\Rentals')
-                                        {{ date('d M, Y h:i a', strtotime($booking->datetime)) }}
+                                        <span class="badge badge-info">{{ date('d M, Y h:i a', strtotime($booking->datetime)) }}</span>
                                         @else
                                         @if($booking->getBookType != null)
                                         <p>
-                                            {{ date('d M, Y h:i a', strtotime($booking->getBookType->start_date)) }}
+                                            <span class="badge badge-info">{{ date('d M, Y h:i a', strtotime($booking->getBookType->start_date)) }}</span>
                                             <br>
-                                            {{ date('d M, Y h:i a', strtotime($booking->getBookType->end_date)) }}
+                                            <span class="badge badge-primary">{{ date('d M, Y h:i a', strtotime($booking->getBookType->end_date)) }}</span>
                                         </p>
                                         @else
                                         @endif
@@ -94,6 +94,7 @@
                                         @if($booking->checkPast())
                                         <a href="{{ route('user.booking.review', $booking->id) }}" class="btn btn-secondary btn-sm" title="Add Review"><i class="fa-solid fa-star"></i></a>
                                         @endif
+                                        <a href="{{ route('user.booking.details', $booking->id ) }}" class="btn btn-secondary btn-sm" title="View Booking"><i class="fa-solid fa-eye"></i></a>
                                     </td>
                                 </tr>
                                 @endforeach

@@ -56,7 +56,7 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <a href="sports.php">SEARCH <i class="fal fa-arrow-to-right"></i></a>
+                                        <a href="{{ route('sports') }}">SEARCH <i class="fal fa-arrow-to-right"></i></a>
                                     </div>
                                 </div>
                             </div>
@@ -97,79 +97,6 @@
                                 </a>
                             </li>
                         @endforeach
-
-                        {{-- <li>
-                            <a href="sports.php">
-                                <div class="category-box text-center">
-                                    <img src="{{ asset('assets/images/c2.png') }}" alt="">
-                                    <h5>Jetski</h5>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="sports.php">
-                                <div class="category-box text-center">
-                                    <img src="{{ asset('assets/images/c3.png') }}" alt="">
-                                    <h5>Dirt Bike / Motorcycles</h5>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="sports.php">
-                                <div class="category-box text-center">
-                                    <img src="{{ asset('assets/images/c4.png') }}" alt="">
-                                    <h5>Snowmobile</h5>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="sports.php">
-                                <div class="category-box text-center">
-                                    <img src="{{ asset('assets/images/c5.png') }}" alt="">
-                                    <h5>UTV's</h5>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="sports.php">
-                                <div class="category-box text-center">
-                                    <img src="{{ 'assets/images/c6.png' }}" alt="">
-                                    <h5>Boat's</h5>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="sports.php">
-                                <div class="category-box text-center">
-                                    <img src="{{ 'assets/images/c7.png' }}" alt="">
-                                    <h5>Surf Boards</h5>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="sports.php">
-                                <div class="category-box text-center">
-                                    <img src="{{ asset('assets/images/c8.png') }}" alt="">
-                                    <h5>Snowborads / Skis</h5>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="sports.php">
-                                <div class="category-box text-center">
-                                    <img src="{{ asset('assets/images/c9.png') }}" alt="">
-                                    <h5>RV</h5>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="sports.php">
-                                <div class="category-box text-center">
-                                    <img src="{{ asset('assets/images/c10.png') }}" alt="">
-                                    <h5>Kayaks /Canoes</h5>
-                                </div>
-                            </a>
-                        </li> --}}
                     </ul>
                 </div>
             </div>
@@ -213,7 +140,7 @@
                         </div>
                         <div class="about-btns">
                             <div class="about-btn">
-                                <a href="about.php" class="btn-a">LEARN MORE <i class="fal fa-arrow-to-right"></i></a>
+                                <a href="{{ route('abouts') }}" class="btn-a">LEARN MORE <i class="fal fa-arrow-to-right"></i></a>
                             </div>
                             <div>
                                 <a href="#"><img src="{{ asset('assets/images/play.png') }}" alt=""> Watch
@@ -251,6 +178,9 @@
                 <div class="row">
 
                     @foreach ($rentals as $rental)
+                        @php
+                        $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $rental->Category->slug)));
+                        @endphp
                         <div class="col-lg-3 col-md-6 col-12">
                             <div class="popular-activity-box">
                                 <div class="popular-activity-box-img">
@@ -258,7 +188,10 @@
                                 </div>
                                 <div class="popular-activity-box-content">
                                     <div class="popular-activity-box-content-icon">
-                                        <img src="{{ asset('assets/images/i2.png') }}" alt="">
+                                        @if(array_key_exists($slug, $icons))
+                                        <img src="{{ asset($icons[$slug]) }}" alt="{{ $rental->Category->title }}">
+                                        @else
+                                        @endif
                                     </div>
                                     <h6>{{ $rental->Category->title }}</h6>
                                     <hr class="seperator">
@@ -270,55 +203,6 @@
                             </div>
                         </div>
                     @endforeach
-
-                    {{-- <div class="col-lg-3 col-md-6 col-12">
-                        <div class="popular-activity-box popular-activity-box-mobile">
-                            <div class="popular-activity-box-img">
-                                <img src="assets/images/p2.png" alt="">
-                            </div>
-                            <div class="popular-activity-box-content">
-                                <div class="popular-activity-box-content-icon"><img
-                                        src="{{ asset('assets/images/i2.png') }}" alt=""></div>
-                                <h6>SKIING</h6>
-                                <hr class="seperator">
-                                <h3>Yamaha Dirt Bike</h3>
-                                <p>$30 per hour</p>
-                                <a href="sports-detail.php"><i class="fal fa-arrow-to-right"></i> MORE ABOUT SKIING</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 col-12">
-                        <div class="popular-activity-box popular-activity-box-tablet">
-                            <div class="popular-activity-box-img">
-                                <img src="assets/images/p3.png" alt="">
-                            </div>
-                            <div class="popular-activity-box-content">
-                                <div class="popular-activity-box-content-icon"><img
-                                        src="{{ asset('assets/images/i3.png') }}" alt=""></div>
-                                <h6>SKIING</h6>
-                                <hr class="seperator">
-                                <h3>Yamaha Snowmobile</h3>
-                                <p>$30 per hour</p>
-                                <a href="sports-detail.php"><i class="fal fa-arrow-to-right"></i> MORE ABOUT SKIING</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 col-12">
-                        <div class="popular-activity-box popular-activity-box-tablet">
-                            <div class="popular-activity-box-img">
-                                <img src="{{ asset('assets/images/p4.png') }}" alt="">
-                            </div>
-                            <div class="popular-activity-box-content">
-                                <div class="popular-activity-box-content-icon"><img
-                                        src="{{ asset('assets/images/i4.png') }}" alt=""></div>
-                                <h6>SKIING</h6>
-                                <hr class="seperator">
-                                <h3>Yamaha UTV's</h3>
-                                <p>$30 per hour</p>
-                                <a href="sports-detail.php"><i class="fal fa-arrow-to-right"></i> MORE ABOUT SKIING</a>
-                            </div>
-                        </div>
-                    </div> --}}
                     <div class="col-lg-12">
                         <div class="popular-activity-btn text-center mt-50"><a href="{{ route('sports') }}"
                                 class="btn-b">VIEW MORE
@@ -444,86 +328,6 @@
                                         </div>
                                     </li>
                                 @endforeach
-
-
-                                {{-- <li>
-                                    <div class="best-spots-box">
-                                        <div class="best-spots-box-img">
-                                            <div class="best-spots-box-img-content">
-                                                <h6>01 Aug - 10 Aug</h6>
-                                            </div>
-                                            <img src="{{ asset('assets/images/spot.jpg') }}" alt="">
-                                        </div>
-                                        <div class="best-spots-box-content">
-                                            <h4 class="mb-5">Scuba Diving In NewYork</h4>
-                                            <span class="mb-20"><i class="fas fa-map-marker-alt"></i> New York, United
-                                                States</span>
-                                            <h4 class="mb-5">4.8 <span>[256 REVIEWS]</span></h4>
-                                            <div class="mb-20"><i class="fas fa-star"></i><i class="fas fa-star"></i><i
-                                                    class="fas fa-star"></i><i class="fas fa-star"></i><i
-                                                    class="fas fa-star"></i></div>
-                                            <ul class="best-spots-box-list mb-20">
-                                                <li>
-                                                    <h5><i class="fas fa-clock"></i> Duration: 2 h 30 mins</h5>
-                                                </li>
-                                                <li>
-                                                    <h5><i class="fas fa-users"></i> Age: 10-40</h5>
-                                                </li>
-                                                <li>
-                                                    <h5><i class="fas fa-user-friends"></i> Capacity: Max 50</h5>
-                                                </li>
-                                            </ul>
-                                            <div class="best-spots-box-btn-and-price">
-                                                <div class="best-spots-box-btn">
-                                                    <a class="btn-b" href="tour-detail.php">ONLINE BOOKING</a>
-                                                </div>
-                                                <div class="best-spots-box-price">
-                                                    <h4>$550+Tax</h4>
-                                                    <h6>Per adult</h6>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="best-spots-box">
-                                        <div class="best-spots-box-img">
-                                            <div class="best-spots-box-img-content">
-                                                <h6>01 Aug - 10 Aug</h6>
-                                            </div>
-                                            <img src="{{ asset('assets/images/spot.jpg') }}" alt="">
-                                        </div>
-                                        <div class="best-spots-box-content">
-                                            <h4 class="mb-5">Scuba Diving In NewYork</h4>
-                                            <span class="mb-20"><i class="fas fa-map-marker-alt"></i> New York, United
-                                                States</span>
-                                            <h4 class="mb-5">4.8 <span>[256 REVIEWS]</span></h4>
-                                            <div class="mb-20"><i class="fas fa-star"></i><i class="fas fa-star"></i><i
-                                                    class="fas fa-star"></i><i class="fas fa-star"></i><i
-                                                    class="fas fa-star"></i></div>
-                                            <ul class="best-spots-box-list mb-20">
-                                                <li>
-                                                    <h5><i class="fas fa-clock"></i> Duration: 2 h 30 mins</h5>
-                                                </li>
-                                                <li>
-                                                    <h5><i class="fas fa-users"></i> Age: 10-40</h5>
-                                                </li>
-                                                <li>
-                                                    <h5><i class="fas fa-user-friends"></i> Capacity: Max 50</h5>
-                                                </li>
-                                            </ul>
-                                            <div class="best-spots-box-btn-and-price">
-                                                <div class="best-spots-box-btn">
-                                                    <a class="btn-b" href="tour-detail.php">ONLINE BOOKING</a>
-                                                </div>
-                                                <div class="best-spots-box-price">
-                                                    <h4>$550+Tax</h4>
-                                                    <h6>Per adult</h6>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li> --}}
                             </ul>
                         </div>
                         <div class="col-lg-12">

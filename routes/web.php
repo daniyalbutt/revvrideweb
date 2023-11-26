@@ -102,5 +102,5 @@ Route::group(['middleware' => ['is_user', 'auth']], function(){
     route::get('booking', [UserController::class, 'getBooking'])->name('user.booking.get');
     route::get('booking/review/{id}', [UserController::class, 'bookingReview'])->name('user.booking.review');
     route::post('review/post', [UserController::class, 'reviewPost'])->name('user.review.post');
-
+    route::get('booking/details/{id}', [UserController::class, 'bookingDetails'])->name('user.booking.details');
 });

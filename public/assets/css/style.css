@@ -5675,3 +5675,12 @@ ul.detail-filter-list form > li {
     border-radius: 50px;
     object-fit: cover;
 }
+.content-wrapper-head {
+    width: 250px;
+}
+
+.content-wrapper-head span {
+    line-height: 20px;
+    display: block;
+    font-size: 15px;
+}

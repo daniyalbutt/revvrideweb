@@ -43,4 +43,13 @@ class Bookings extends Model
             return $result;
         }
     }
+
+    public function getUser(){
+        return $this->hasOne(User::class, 'id', 'user_id');
+    }
+
+    public function addons(){
+        return $this->hasMany(BookingAddons::class, 'booking_id', 'id');
+    }
+
 }

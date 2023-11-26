@@ -45,6 +45,19 @@ class FrontController extends Controller
             'rv' => 'assets/images/c9.png',
             'kayaks-canoes' => 'assets/images/c10.png',
         ];
+
+        $data['icons'] = [
+            'atvs' => 'assets/images/c1.png',
+            'jet-skis' => 'assets/images/i1.png',
+            'dirt-bike-motorcycles' => 'assets/images/i2.png',
+            'snow-mobile' => 'assets/images/c4.png',
+            'utvs' => 'assets/images/c5.png',
+            'boats' => 'assets/images/c6.png',
+            'speed-boats' => 'assets/images/c7.png',
+            'snow-borads-skis' => 'assets/images/c8.png',
+            'rv' => 'assets/images/c9.png',
+            'kayaks-canoes' => 'assets/images/c10.png',
+        ];
         // dd($data['images']);
         return view('welcome')->with($data);
     }

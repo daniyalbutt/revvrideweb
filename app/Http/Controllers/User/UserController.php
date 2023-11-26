@@ -283,4 +283,12 @@ class UserController extends Controller
         Session::flash('success', 'Review Added Successful!');
         return back();
     }
+
+    public function bookingDetails($id){
+        $data = Bookings::where('id', $id)->where('user_id', Auth::user()->id)->first();
+        if($data == null){
+            return back();
+        }
+        return view('user.booking-details', compact('data'));
+    }
 }

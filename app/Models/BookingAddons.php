@@ -17,4 +17,8 @@ class BookingAddons extends Model
         'amount',
         'total'
     ];
+
+    public function getAddons(){
+        return $this->hasOne(RentalsAddons::class, 'id', 'rental_addons_id');
+    }
 }

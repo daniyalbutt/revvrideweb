@@ -9,6 +9,6 @@
         <a href="{{ route('user.booking.get') }}" class="{{ request()->routeIs('user.booking.get') ? 'active' : '' }}"><i class="fa-solid fa-calendar-days"></i> My Booking</a>
     </li>
     <li>
-        <a href=""><i class="fa-solid fa-credit-card"></i> Payment</a>
+        <a href="javascript:;" onclick="event.preventDefault();document.getElementById('logout-form').submit();"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
     </li>
 </ul>
