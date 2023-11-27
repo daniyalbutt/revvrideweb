@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Bookings;
 use App\Models\Payment;
 use App\Models\User;
+use App\Models\Withdraw;
 use App\Models\UserCategories;
 use Auth;
 use Carbon\Carbon;
@@ -173,5 +174,16 @@ class VendorController extends Controller
         })->sum('total');
 
         return view('vendors.withdraw.create', compact('totalAmount'));
+    }
+
+    public function withdrawStore(Request $request){
+        $data = new Withdraw();
+        $data->amount = $request->amount;
+        $data->description = $request->description;
+        $data->status = 'Requested';
+        $data->user_id = Auth::user()->id;
+        $data->save();
+        Session::flash('success', 'Withdraw Requested Successfully');
+        return back();
     }
 }

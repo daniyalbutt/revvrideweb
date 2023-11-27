@@ -79,12 +79,14 @@ class UserController extends Controller
             $cart['form_availability'] = $request->form_availability;
             $cart['bookable_type'] = $request->bookable_type;
             $quantity = $request->quantity;
-            foreach ($quantity as $key => $value) {
-                $data = RentalsAddons::where('id', $key)->first();
-                $cart['addons'][$key]['id'] = $data->id;
-                $cart['addons'][$key]['name'] = $data->name;
-                $cart['addons'][$key]['price'] = $data->price;
-                $cart['addons'][$key]['quantity'] = $value;
+            if($quantity != null){
+                foreach ($quantity as $key => $value) {
+                    $data = RentalsAddons::where('id', $key)->first();
+                    $cart['addons'][$key]['id'] = $data->id;
+                    $cart['addons'][$key]['name'] = $data->name;
+                    $cart['addons'][$key]['price'] = $data->price;
+                    $cart['addons'][$key]['quantity'] = $value;
+                }
             }
 
             Session::put('cart', $cart);
@@ -229,15 +231,17 @@ class UserController extends Controller
                     $data->save();
 
                     if($cart['bookable_type'] == 'rental'){
-                        foreach($cart['addons'] as $key => $addons){
-                            $book_addon = new BookingAddons();
-                            $book_addon->booking_id = $data->id;
-                            $book_addon->rental_id = $bookable_id;
-                            $book_addon->rental_addons_id = $addons['id'];
-                            $book_addon->quantity = $addons['quantity'];
-                            $book_addon->amount = $addons['price'];
-                            $book_addon->total = (float)$addons['price'] * (int)$addons['quantity'];
-                            $book_addon->save();
+                        if(array_key_exists('addons', $cart) != false){
+                            foreach($cart['addons'] as $key => $addons){
+                                $book_addon = new BookingAddons();
+                                $book_addon->booking_id = $data->id;
+                                $book_addon->rental_id = $bookable_id;
+                                $book_addon->rental_addons_id = $addons['id'];
+                                $book_addon->quantity = $addons['quantity'];
+                                $book_addon->amount = $addons['price'];
+                                $book_addon->total = (float)$addons['price'] * (int)$addons['quantity'];
+                                $book_addon->save();
+                            }
                         }
                     }
 

@@ -59,11 +59,11 @@
                                     @csrf
                                     <div class="form-group col-md-12">
                                         <label for="amount">Amount (${{ $totalAmount }})</label>
-                                        <input type="number" class="form-control" id="amount" name="amount" required steps="any">
+                                        <input type="number" class="form-control" id="amount" name="amount" required step="any">
                                     </div>
                                     <div class="form-group col-md-12">
                                         <label for="description">Account Details</label>
-                                        <textarea id="description" name="description" class="form-control" cols="30" rows="10"></textarea>
+                                        <textarea id="description" name="description" class="form-control" cols="30" rows="10" required></textarea>
                                     </div>
 
                                     <div class="form-group col-md-12">

@@ -88,5 +88,8 @@ class User extends Authenticatable
         }
     }
 
-
+    public function withdraw(){
+        return $this->hasMany(Withdraw::class, 'user_id', 'id')->orderBy('id', 'desc');
+    }
+    
 }

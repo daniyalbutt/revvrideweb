@@ -44,13 +44,21 @@
                                     <tr>
                                         <th scope="col">Name</th>
                                         <th>Price</th>
-                                        <th>Location</th>
-                                        <th>Date</th>
+                                        <th>Details</th>
+                                        <th>Status</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    
+                                    @foreach ( Auth::user()->withdraw as $key => $withdraw)
+                                    <tr>
+                                        <td>{{ ++$key }}</td>
+                                        <td>${{ $withdraw->amount }}</td>
+                                        <td>{{ $withdraw->description }}</td>
+                                        <td><button class="btn btn-info btn-sm">{{ $withdraw->status }}</button></td>
+                                        <td><button class="btn btn-sm btn-primary"><i class="fa-solid fa-paper-plane"></i></button></td>
+                                    </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>

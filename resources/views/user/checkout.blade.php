@@ -341,6 +341,7 @@
                                     </li>
                                     @endif
                                     @if($cart['bookable_type'] == 'rental')
+                                    @if(array_key_exists('addons', $cart) != false)
                                     @foreach($cart['addons'] as $key => $addons)
                                     <li>
                                         <div class="product-and-counter">
@@ -353,6 +354,7 @@
                                         </div>
                                     </li>
                                     @endforeach
+                                    @endif
                                     @endif
                                     <li>
                                         <div class="product-and-counter">
