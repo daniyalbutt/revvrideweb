@@ -277,6 +277,17 @@
         new WOW().init();
     </script>
     <script>
+        @if(Session::has('message'))
+        $.toast({
+            heading: 'Success',
+            text: '{{Session::get("message")}}',
+            showHideTransition: 'slide',
+            icon: 'success'
+        })
+    @endif
+    </script>
+    <script>
+
         function create_custom_dropdowns() {
             $('select').each(function(i, select) {
                 if (!$(this).next().hasClass('dropdown')) {

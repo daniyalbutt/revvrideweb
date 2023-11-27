@@ -75,5 +75,18 @@ class User extends Authenticatable
     public function payments(){
         return $this->hasMany(Payment::class);
     }
+    public function card($type){
+        if($type == "all")
+        {
+            return $this->hasMany(Payment::class);
+        }
+        else{
+            if ($this->hasOne(Payment::class)->where('payment_type',$type)->exists()) {
+                return $this->hasOne(Payment::class)->where('payment_type',$type)->with('cardDetail')->first()->cardDetail;
+            }
+            return false;
+        }
+    }
+
 
 }

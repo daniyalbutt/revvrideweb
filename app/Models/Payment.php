@@ -9,10 +9,10 @@ class Payment extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
 
-protected $guarded = [];
-
-public function cardDetail(){
-    return $this->hasOne(CardDetail::class);
-}
+    public function cardDetail()
+    {
+        return $this->hasOne(CardDetail::class);
+    }
 }

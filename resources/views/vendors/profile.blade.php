@@ -9,16 +9,16 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <style>
-    .map {
-        width: 66%;
-        height: 451px;
-        margin: 0 auto;
-    }
+        .map {
+            width: 66%;
+            height: 451px;
+            margin: 0 auto;
+        }
 
-div#map {
-    width: 100%;
-    height: 100%;
-}
+        div#map {
+            width: 100%;
+            height: 100%;
+        }
     </style>
 @endpush
 @section('content')
@@ -256,7 +256,8 @@ div#map {
                                     <div class="contact-form-fields registration-form-fields justify-content-center">
                                         <div class="contact-form-field registration-form-field search-field">
 
-                                            <input type="search" id="gsearch" name="gsearch" value="{{ Auth::user()->location }}" class="form-control">
+                                            <input type="search" id="gsearch" name="gsearch"
+                                                value="{{ Auth::user()->location }}" class="form-control">
                                             <i class="fas fa-magnifying-glass"></i>
 
 
@@ -363,9 +364,11 @@ div#map {
                                         </div>
                                     </li>
                                 </ul>
+
                                 <div class="box-12 showfirst">
-                                    <form id="cardform" action="{{ route('vendor.card.store') }}" method="POST">
+                                    <form class="paymentform" action="{{ route('vendor.card.store') }}" method="POST">
                                         @csrf
+                                        <input type="hidden" name="payment_type" value="card">
                                         <div class="payment-box">
                                             <div class="payment-content mb-30">
                                                 <h5 class="third-hd mb-10"><img src="assets/images/Icon.png"
@@ -373,28 +376,33 @@ div#map {
                                                     Your Payment info is stored securely</h5>
                                                 <img src="assets/images/card.png" alt="">
                                             </div>
-
                                             <div class="form-field mb-20">
                                                 <label for="cardname">Card Holder Name*</label>
                                                 <input type="text" id="cardname" name="name"
-                                                    placeholder="Sarah Kevin">
+                                                    placeholder="Sarah Blake"
+                                                    value="{{ Auth::user()->card('card') ? Auth::user()->card('card')->holder_name : '' }}"
+                                                    required>
                                             </div>
                                             <div class="form-field payment-img mb-20">
                                                 <label for="cardname">Card Number*</label>
                                                 <input type="number" id="cardnumber" name="card_number"
-                                                    placeholder="5500-0000-0000-0000" maxlength="16">
+                                                    value="{{ Auth::user()->card('card') ? Auth::user()->card('card')->card_number : '' }}"
+                                                    placeholder="5500-0000-0000-0000" maxlength="16" required>
                                                 <img src="assets/images/master.png" alt="">
                                             </div>
                                             <div class="form-fields">
                                                 <div class="form-field mb-20">
                                                     <label for="cardname">Expiry Date*</label>
                                                     <input id="expiry" type="number" name="exp_date"
-                                                        placeholder="(mm/yy)" maxlength="4">
+                                                        placeholder="(mm/yy)" maxlength="4"
+                                                        value="{{ Auth::user()->card('card') ? Auth::user()->card('card')->expiry_date : '' }}"
+                                                        required>
                                                 </div>
                                                 <div class="form-field mb-20">
                                                     <label for="cardname">CVV*</label>
-                                                    <input type="password" placeholder="****" name="cvv"
-                                                        maxlength="4">
+                                                    <input type="number"
+                                                        value="{{ Auth::user()->card('card') ? Auth::user()->card('card')->cvv : '' }}"
+                                                        placeholder="123" name="cvv" maxlength="4" required>
                                                 </div>
                                             </div>
                                             <div class="mb-10">
@@ -414,7 +422,7 @@ div#map {
                                             </div>
                                     </form>
                                 </div>
-                                </form>
+
                             </div>
                             <div class="box-13">
                                 <div class="payment-box">
@@ -423,28 +431,36 @@ div#map {
                                             Your Payment info is stored securely</h5>
                                         <img src="assets/images/card.png" alt="">
                                     </div>
-                                    <form id="paypalform" action="{{ route('vendor.paypal.store') }}" method="POST">
+                                    <form class="paymentform" action="{{ route('vendor.card.store') }}" method="POST">
                                         @csrf
+                                        <input type="hidden" name="payment_type" value="paypal">
                                         <div class="form-field mb-20">
                                             <label for="cardname">Card Holder Name*</label>
                                             <input type="text" id="cardname" name="name"
-                                                placeholder="Sarah Kevin">
+                                                placeholder="Sarah Blake"
+                                                value="{{ Auth::user()->card('paypal') ? Auth::user()->card('paypal')->holder_name : '' }}"
+                                                required>
                                         </div>
                                         <div class="form-field payment-img mb-20">
                                             <label for="cardname">Card Number*</label>
                                             <input type="number" id="cardnumber" name="card_number"
-                                                placeholder="5500-0000-0000-0000" maxlength="16">
+                                                value="{{ Auth::user()->card('paypal') ? Auth::user()->card('paypal')->card_number : '' }}"
+                                                placeholder="5500-0000-0000-0000" maxlength="16" required>
                                             <img src="assets/images/master.png" alt="">
                                         </div>
                                         <div class="form-fields">
                                             <div class="form-field mb-20">
                                                 <label for="cardname">Expiry Date*</label>
                                                 <input id="expiry" type="number" name="exp_date"
-                                                    placeholder="(mm/yy)" maxlength="4">
+                                                    placeholder="(mm/yy)" maxlength="4"
+                                                    value="{{ Auth::user()->card('paypal') ? Auth::user()->card('paypal')->expiry_date : '' }}"
+                                                    required>
                                             </div>
                                             <div class="form-field mb-20">
                                                 <label for="cardname">CVV*</label>
-                                                <input type="password" name="cvv" placeholder="****" maxlength="4">
+                                                <input type="number"
+                                                    value="{{ Auth::user()->card('paypal') ? Auth::user()->card('paypal')->cvv : '' }}"
+                                                    placeholder="123" name="cvv" maxlength="4" required>
                                             </div>
                                         </div>
                                         <div class="mb-10">
@@ -472,28 +488,37 @@ div#map {
                                             Your Payment info is stored securely</h5>
                                         <img src="assets/images/card.png" alt="">
                                     </div>
-                                    <form id="googleform" action="{{ route('vendor.google.store') }}" method="POST">
+                                    <form class="paymentform" action="{{ route('vendor.card.store') }}" method="POST">
                                         @csrf
+                                        <input type="hidden" name="payment_type" value="google">
+
                                         <div class="form-field mb-20">
                                             <label for="cardname">Card Holder Name*</label>
                                             <input type="text" id="cardname" name="name"
-                                                placeholder="Sarah Kevin">
+                                                placeholder="Sarah Blake"
+                                                value="{{ Auth::user()->card('google') ? Auth::user()->card('google')->holder_name : '' }}"
+                                                required>
                                         </div>
                                         <div class="form-field payment-img mb-20">
                                             <label for="cardname">Card Number*</label>
                                             <input type="number" id="cardnumber" name="card_number"
-                                                placeholder="5500-0000-0000-0000" maxlength="16">
+                                                value="{{ Auth::user()->card('google') ? Auth::user()->card('google')->card_number : '' }}"
+                                                placeholder="5500-0000-0000-0000" maxlength="16" required>
                                             <img src="assets/images/master.png" alt="">
                                         </div>
                                         <div class="form-fields">
                                             <div class="form-field mb-20">
                                                 <label for="cardname">Expiry Date*</label>
                                                 <input id="expiry" type="number" name="exp_date"
-                                                    placeholder="(mm/yy)" maxlength="4">
+                                                    placeholder="(mm/yy)" maxlength="4"
+                                                    value="{{ Auth::user()->card('google') ? Auth::user()->card('google')->expiry_date : '' }}"
+                                                    required>
                                             </div>
                                             <div class="form-field mb-20">
                                                 <label for="cardname">CVV*</label>
-                                                <input type="password" name="cvv" placeholder="****" maxlength="4">
+                                                <input type="number"
+                                                    value="{{ Auth::user()->card('google') ? Auth::user()->card('google')->cvv : '' }}"
+                                                    placeholder="123" name="cvv" maxlength="4" required>
                                             </div>
                                         </div>
                                         <div class="mb-10">
@@ -521,34 +546,38 @@ div#map {
                                             Your Payment info is stored securely</h5>
                                         <img src="assets/images/card.png" alt="">
                                     </div>
-                                    <form id="appleform" action="{{ route('vendor.apple.store') }}" method="POST">
+                                    <form class="paymentform" action="{{ route('vendor.card.store') }}" method="POST">
                                         @csrf
+                                        <input type="hidden" name="payment_type" value="apple">
+
                                         <div class="form-field mb-20">
                                             <label for="cardname">Card Holder Name*</label>
                                             <input type="text" id="cardname" name="name"
-                                                placeholder="Sarah Kevin">
+                                                placeholder="Sarah Blake"
+                                                value="{{ Auth::user()->card('apple') ? Auth::user()->card('apple')->holder_name : '' }}"
+                                                required>
                                         </div>
                                         <div class="form-field payment-img mb-20">
                                             <label for="cardname">Card Number*</label>
                                             <input type="number" id="cardnumber" name="card_number"
-                                                placeholder="5500-0000-0000-0000" maxlength="16">
+                                                value="{{ Auth::user()->card('apple') ? Auth::user()->card('apple')->card_number : '' }}"
+                                                placeholder="5500-0000-0000-0000" maxlength="16" required>
                                             <img src="assets/images/master.png" alt="">
                                         </div>
                                         <div class="form-fields">
                                             <div class="form-field mb-20">
                                                 <label for="cardname">Expiry Date*</label>
                                                 <input id="expiry" type="number" name="exp_date"
-                                                    placeholder="(mm/yy)" maxlength="4">
+                                                    placeholder="(mm/yy)" maxlength="4"
+                                                    value="{{ Auth::user()->card('apple') ? Auth::user()->card('apple')->expiry_date : '' }}"
+                                                    required>
                                             </div>
                                             <div class="form-field mb-20">
                                                 <label for="cardname">CVV*</label>
-                                                <input type="password" name="cvv" placeholder="****" maxlength="4">
+                                                <input type="number"
+                                                    value="{{ Auth::user()->card('apple') ? Auth::user()->card('apple')->cvv : '' }}"
+                                                    placeholder="123" name="cvv" maxlength="4" required>
                                             </div>
-                                        </div>
-                                        <div class="mb-10">
-                                            <input type="checkbox" id="add2"
-                                                value="Save details for later transaction">
-                                            <label for="add2">Make Default</label>
                                         </div>
                                         <p class="primary-para payment-para mb-20">In order to verify your account we
                                             may charge your account with small amount that will be refunded.</p>
@@ -570,28 +599,36 @@ div#map {
                                             Your Payment info is stored securely</h5>
                                         <img src="assets/images/card.png" alt="">
                                     </div>
-                                    <form id="stripeform" action="{{ route('vendor.stripe.store') }}" method="POST">
+                                    <form class="paymentform" action="{{ route('vendor.card.store') }}" method="POST">
                                         @csrf
+                                        <input type="hidden" name="payment_type" value="stripe">
                                         <div class="form-field mb-20">
                                             <label for="cardname">Card Holder Name*</label>
                                             <input type="text" id="cardname" name="name"
-                                                placeholder="Sarah Kevin">
+                                                placeholder="Sarah Blake"
+                                                value="{{ Auth::user()->card('stripe') ? Auth::user()->card('stripe')->holder_name : '' }}"
+                                                required>
                                         </div>
                                         <div class="form-field payment-img mb-20">
                                             <label for="cardname">Card Number*</label>
                                             <input type="number" id="cardnumber" name="card_number"
-                                                placeholder="5500-0000-0000-0000" maxlength="16">
+                                                value="{{ Auth::user()->card('stripe') ? Auth::user()->card('stripe')->card_number : '' }}"
+                                                placeholder="5500-0000-0000-0000" maxlength="16" required>
                                             <img src="assets/images/master.png" alt="">
                                         </div>
                                         <div class="form-fields">
                                             <div class="form-field mb-20">
                                                 <label for="cardname">Expiry Date*</label>
                                                 <input id="expiry" type="number" name="exp_date"
-                                                    placeholder="(mm/yy)" maxlength="4">
+                                                    placeholder="(mm/yy)" maxlength="4"
+                                                    value="{{ Auth::user()->card('stripe') ? Auth::user()->card('stripe')->expiry_date : '' }}"
+                                                    required>
                                             </div>
                                             <div class="form-field mb-20">
                                                 <label for="cardname">CVV*</label>
-                                                <input type="password" name="cvv" placeholder="****" maxlength="4">
+                                                <input type="number"
+                                                    value="{{ Auth::user()->card('stripe') ? Auth::user()->card('stripe')->cvv : '' }}"
+                                                    placeholder="123" name="cvv" maxlength="4" required>
                                             </div>
                                         </div>
                                         <div class="mb-10">
@@ -616,130 +653,60 @@ div#map {
                                 <div class="regiter-btn payment-method-btn text-center mb-10">
                                     <a href="#" class="btn-c step-form-prev-custom">Go Back</a>
                                 </div>
+
                                 <!-- <div class="regiter-btn payment-method-btn text-center mb-10">
-                                                                                                <a href="#" class="btn-c step-form-next">Add a payment method</a>
-                                                                                                </div> -->
+                                                                                                                            <a href="#" class="btn-c step-form-next">Add a payment method</a>
+                                                                                                                            </div> -->
                             </div>
                             <div class="registration-content text-center">
                                 <a class="" href="./">SKIP</a>
                             </div>
                 </div>
                 </li>
-                <li>
+                <li >
                     <div class="payment-mainbox">
                         <div class="register-content add-card-content text-center">
                             <h2 class="primary-hd mb-10">Payment Management <button class="step-form-next"><img
                                         src="assets/images/add.png" alt=""></button></h2>
                             <ul class="add-card-list mb-20">
-                                <li>
-                                    <div class="add-card-box">
-                                        <div class="add-card-box-img-and-content">
-                                            <div class="add-card-box-img">
-                                                <img src="{{ asset('assets/images/master1.webp') }}" alt="">
+                                @foreach (Auth::user()->card('all')->get() as $item)
+                                    <li>
+                                        <div class="add-card-box">
+                                            <div class="add-card-box-img-and-content">
+                                                <div class="add-card-box-img">
+                                                    <img src="{{ asset('assets/images/cards/'.$item->payment_type.'.png') }}" alt="">
+                                                </div>
+                                                <div class="add-card-box-content active">
+                                                    <h6>{{ ucwords($item->payment_type) }}
+                                                        {!! $item->default_payment == 1 ? '<span>Default</span>' : '' !!}</h6>
+                                                    <p><span>************</span>{{ ' '.substr($item->cardDetail->card_number, -4)}}</p>
+                                                </div>
                                             </div>
-                                            <div class="add-card-box-content active">
-                                                <h6>Master <span>Default</span></h6>
-                                                <p><span>************</span>1234</p>
-                                            </div>
-                                        </div>
-                                        <div class="add-card-box-menu">
-                                            <button class="option-btn"><img
-                                                    src="{{ asset('assets/images/option.webp') }}"
-                                                    alt=""></button>
-                                            <ul class="card-option-list">
-                                                <li><button>Delete</button></li>
-                                                <li><button>Remove Default</button></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="add-card-box">
-                                        <div class="add-card-box-img-and-content">
-                                            <div class="add-card-box-img">
-                                                <img src="{{ asset('assets/images/visa.webp') }}" alt="">
-                                            </div>
-                                            <div class="add-card-box-content active">
-                                                <h6>Visa</h6>
-                                                <p><span>************</span>5678</p>
-                                            </div>
-                                        </div>
-                                        <div class="add-card-box-menu">
-                                            <button class="option-btn"><img
-                                                    src="{{ asset('assets/images/option.webp') }}"
-                                                    alt=""></button>
-                                            <ul class="card-option-list">
-                                                <li><button>Delete</button></li>
-                                                <li><button>Make Default</button></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="add-card-box">
-                                        <div class="add-card-box-img-and-content">
-                                            <div class="add-card-box-img">
-                                                <img src="{{ asset('assets/images/paypal.webp') }}" alt="">
-                                            </div>
-                                            <div class="add-card-box-content active">
-                                                <h6>PayPal</h6>
+                                            <div class="add-card-box-menu">
+                                                <button class="option-btn"><img
+                                                        src="{{ asset('assets/images/option.webp') }}"
+                                                        alt=""></button>
+                                                <ul class="card-option-list">
+                                                    <li>
+                                                        <form method="POST"
+                                                            action="{{ route('vendor.deletepayment', $item->id) }}">
+                                                            @csrf
+                                                            @method('DELETE')
+
+                                                            <button>Delete</button>
+                                                        </form>
+                                                    </li>
+                                                    @if ($item->default_payment ==0)
+                                                    <li> <a href="{{route('vendor.makedefaultpay',$item->id)}}">Make Default</a></li>
+                                                    @endif
+
+                                                </ul>
                                             </div>
                                         </div>
-                                        <div class="add-card-box-menu">
-                                            <button class="option-btn"><img
-                                                    src="{{ asset('assets/images/option.webp') }}"
-                                                    alt=""></button>
-                                            <ul class="card-option-list">
-                                                <li><button>Delete</button></li>
-                                                <li><button>Make Default</button></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="add-card-box">
-                                        <div class="add-card-box-img-and-content">
-                                            <div class="add-card-box-img">
-                                                <img src="{{ asset('assets/images/gpay.png') }}" alt="">
-                                            </div>
-                                            <div class="add-card-box-content active">
-                                                <h6>Google Pay</h6>
-                                                <p><span>************</span>@gmail.com</p>
-                                            </div>
-                                        </div>
-                                        <div class="add-card-box-menu">
-                                            <button class="option-btn"><img
-                                                    src="{{ asset('assets/images/option.webp') }}"
-                                                    alt=""></button>
-                                            <ul class="card-option-list">
-                                                <li><button>Delete</button></li>
-                                                <li><button>Make Default</button></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="add-card-box">
-                                        <div class="add-card-box-img-and-content">
-                                            <div class="add-card-box-img">
-                                                <img src="{{ asset('assets/images/apay.png') }}" alt="">
-                                            </div>
-                                            <div class="add-card-box-content active">
-                                                <h6>Apple Pay</h6>
-                                                <p><span>************</span>@icloud.com</p>
-                                            </div>
-                                        </div>
-                                        <div class="add-card-box-menu">
-                                            <button class="option-btn"><img
-                                                    src="{{ asset('assets/images/option.webp') }}"
-                                                    alt=""></button>
-                                            <ul class="card-option-list">
-                                                <li><button>Delete</button></li>
-                                                <li><button>Make Default</button></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </li>
+                                    </li>
+                                @endforeach
+
+
                             </ul>
                             <div class="back-and-continue-btns mb-10">
                                 <div class="regiter-btn payment-method-btn text-center mb-10">
@@ -1007,6 +974,7 @@ div#map {
                             <div class="regiter-btn payment-method-btn text-center mb-10">
                                 <a href="#" class="btn-c step-form-prev-custom">Go Back</a>
                             </div>
+
                         </div>
                         <div class="registration-content text-center">
                             <a class="" href="./">SKIP</a>
@@ -1039,6 +1007,18 @@ div#map {
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABwtgNHhRqnfw_sXX1-x-f0LQNm4lxk6s&callback=initAutocomplete&libraries=places&v=weekly"
         defer></script>
     <script>
+        function nextStep() {
+            var sectionID = "#registration-section-id";
+            $('.registration-list li.active').next('li').addClass('active');
+            $('.registration-list li.active').prev('li').removeClass('active');
+            $('.register-tabbing-list li.active').next('li').addClass('active');
+            $('.register-tabbing-list li.active').prev('li').removeClass('active');
+            if ($(sectionID).length) {
+                $('html, body').animate({
+                    scrollTop: $(sectionID).offset().top
+                }, 500);
+            }
+        }
         // This example adds a search box to a map, using the Google Place Autocomplete
         // feature. People can enter geographical searches. The search box will return a
         // pick list containing a mix of places and predicted search terms.
@@ -1084,8 +1064,9 @@ div#map {
                 const bounds = new google.maps.LatLngBounds();
 
                 places.forEach((place) => {
+                    document.getElementById('locations_lat').value = place.geometry.location.lat();
+                    document.getElementById('locations_lng').value = place.geometry.location.lng();
                     if (!place.geometry || !place.geometry.location) {
-                        console.log("Returned place contains no geometry");
                         return;
                     }
 
@@ -1156,47 +1137,14 @@ div#map {
                             showHideTransition: 'slide',
                             icon: 'success'
                         })
-                        var sectionID = "#registration-section-id";
-                        $('.registration-list li.active').next('li').addClass('active');
-                        $('.registration-list li.active').prev('li').removeClass('active');
-                        $('.register-tabbing-list li.active').next('li').addClass('active');
-                        $('.register-tabbing-list li.active').prev('li').removeClass('active');
-                        if ($(sectionID).length) {
-                            $('html, body').animate({
-                                scrollTop: $(sectionID).offset().top
-                            }, 500);
-                        }
+                        nextStep()
 
                     }
                 },
                 error: function(error) {}
             });
         });
-        $('#cardform').submit(function(e) {
-            e.preventDefault();
-            var formData = new FormData(this);
-            $.ajax({
-                url: $(this).attr('action'),
-                type: 'POST',
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function(response) {
-                    if (response.status) {
-
-                        $.toast({
-                            heading: 'Success',
-                            text: 'Payment successfully addes',
-                            showHideTransition: 'slide',
-                            icon: 'success'
-                        })
-
-                    }
-                },
-                error: function(error) {}
-            });
-        });
-        $('#paypalform').submit(function(e) {
+        $('.paymentform').submit(function(e) {
             e.preventDefault();
             var formData = new FormData(this);
             $.ajax({
@@ -1221,78 +1169,6 @@ div#map {
             });
         });
 
-        $('#googleform').submit(function(e) {
-            e.preventDefault();
-            var formData = new FormData(this);
-            $.ajax({
-                url: $(this).attr('action'),
-                type: 'POST',
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function(response) {
-                    if (response.status) {
-
-                        $.toast({
-                            heading: 'Success',
-                            text: 'Payment successfully addes',
-                            showHideTransition: 'slide',
-                            icon: 'success'
-                        })
-
-                    }
-                },
-                error: function(error) {}
-            });
-        });
-        $('#appleform').submit(function(e) {
-            e.preventDefault();
-            var formData = new FormData(this);
-            $.ajax({
-                url: $(this).attr('action'),
-                type: 'POST',
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function(response) {
-                    if (response.status) {
-
-                        $.toast({
-                            heading: 'Success',
-                            text: 'Payment successfully addes',
-                            showHideTransition: 'slide',
-                            icon: 'success'
-                        })
-
-                    }
-                },
-                error: function(error) {}
-            });
-        });
-        $('#stripeform').submit(function(e) {
-            e.preventDefault();
-            var formData = new FormData(this);
-            $.ajax({
-                url: $(this).attr('action'),
-                type: 'POST',
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function(response) {
-                    if (response.status) {
-
-                        $.toast({
-                            heading: 'Success',
-                            text: 'Payment successfully addes',
-                            showHideTransition: 'slide',
-                            icon: 'success'
-                        })
-
-                    }
-                },
-                error: function(error) {}
-            });
-        });
 
         $(document).ready(function() {
             $('.dropfiy').dropify();

@@ -3,15 +3,15 @@
 namespace App\Http\Controllers\Vendors;
 
 use App\Http\Controllers\Controller;
+use App\Models\Payment;
+use App\Models\RentalsAddons;
 use App\Models\Tours;
-use Illuminate\Http\Request;
+use App\Models\ToursImages;
 use Auth;
+use DB;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Redirect;
-use App\Models\Payment;
-use DB;
-use App\Models\ToursImages;
-use App\Models\RentalsAddons;
 
 class VendorToursController extends Controller
 {
@@ -21,6 +21,7 @@ class VendorToursController extends Controller
     public function index()
     {
         $data = Tours::where('user_id', Auth::user()->id)->orderBy('id', 'desc')->get();
+
         return view('vendors.tour.index', compact('data'));
     }
 
@@ -48,7 +49,7 @@ class VendorToursController extends Controller
             'whats_include' => 'required',
         ]);
 
-        if($validator->fails()) {
+        if ($validator->fails()) {
             return Redirect::back()->withErrors($validator);
         }
 
@@ -71,7 +72,7 @@ class VendorToursController extends Controller
             $filename = date('d-m-y-H-i-s').'_'.$imagefile->getClientOriginalName();
             $path = 'public/tours/';
             $url_path = 'storage/tours/';
-            $imagefile->storeAs($path,$filename);
+            $imagefile->storeAs($path, $filename);
             DB::table('tours_images')->insert(
                 ['tour_id' => $data->id, 'image' => env('APP_URL').$url_path.$filename]
             );
@@ -81,52 +82,20 @@ class VendorToursController extends Controller
 
     }
 
-    public function paypalstore(Request $request)
-    {
-      $payment = Payment::create(
-                    ['user_id' => Auth::user()->id, 'payment_type' => 'paypal']
-        );
-        $payment->cardDetail()->create(
-            [
-                'holder_name' => $request->input('name'),
-                'card_number' => $request->input('card_number'),
-                'expiry_date' => $request->input('exp_date'),
-                'cvv' => $request->input('cvv')
-            ]
-        );
 
-        return response()->json(['status' => true, 'message' => 'Payment Saved Successfully']);
-    }
 
-    public function googlepaystore(Request $request)
-    {
-      $payment =  Payment::create(
-        ['user_id' => Auth::user()->id, 'payment_type' => 'googlepay']
-);
-        $payment->cardDetail()->create(
-            [
-                'holder_name' => $request->input('name'),
-                'card_number' => $request->input('card_number'),
-                'expiry_date' => $request->input('exp_date'),
-                'cvv' => $request->input('cvv')
-            ]
-        );
-
-        return response()->json(['status' => true, 'message' => 'Payment Saved Successfully']);
-    }
 
     public function cardstore(Request $request)
     {
-         $payment =  Payment::create(
-        ['user_id' => Auth::user()->id, 'payment_type' => 'card']
-);
-
-        $payment->cardDetail()->create(
+        $payment = Payment::updateOrCreate(
+            ['user_id' => Auth::user()->id, 'payment_type' => $request->input('payment_type')]
+        );
+        $payment->cardDetail()->updateOrCreate(['payment_id' => $payment->id],
             [
                 'holder_name' => $request->input('name'),
                 'card_number' => $request->input('card_number'),
                 'expiry_date' => $request->input('exp_date'),
-                'cvv' => $request->input('cvv')
+                'cvv' => $request->input('cvv'),
             ]
         );
 
@@ -134,51 +103,17 @@ class VendorToursController extends Controller
 
     }
 
-    public function locationupdate(Request $request){
+    public function locationupdate(Request $request)
+    {
         Auth::user()->update([
-            'lat'=>$request->input('locations_lat'),
+            'lat' => $request->input('locations_lat'),
             'lng' => $request->input('locations_lng'),
             'location' => $request->input('gsearch'),
         ]);
-        return response()->json(['status'=>true, "message"=>"Your location has been updated"]);
+
+        return response()->json(['status' => true, 'message' => 'Your location has been updated']);
     }
 
-    public function applepaystore(Request $request)
-    {
-            $payment =  Payment::create(
-            ['user_id' => Auth::user()->id, 'payment_type' => 'apple']
-    );
-
-            $payment->cardDetail()->create(
-                [
-                    'holder_name' => $request->input('name'),
-                    'card_number' => $request->input('card_number'),
-                    'expiry_date' => $request->input('exp_date'),
-                    'cvv' => $request->input('cvv')
-                ]
-            );
-
-            return response()->json(['status' => true, 'message' => 'Payment Saved Successfully']);
-
-    }
-    public function stripestore(Request $request)
-    {
-            $payment =  Payment::create(
-            ['user_id' => Auth::user()->id, 'payment_type' => 'stripe']
-    );
-
-            $payment->cardDetail()->create(
-                [
-                    'holder_name' => $request->input('name'),
-                    'card_number' => $request->input('card_number'),
-                    'expiry_date' => $request->input('exp_date'),
-                    'cvv' => $request->input('cvv')
-                ]
-            );
-
-            return response()->json(['status' => true, 'message' => 'Payment Saved Successfully']);
-
-    }
 
 
     /**
@@ -195,10 +130,11 @@ class VendorToursController extends Controller
     public function edit($id)
     {
         $data = Tours::where('id', $id)->where('user_id', Auth::user()->id)->first();
-        if($data == null){
+        if ($data == null) {
             return redirect()->route('vendors.tour.index');
         }
         $cat = Auth::user()->get_categories;
+
         return view('vendors.tour.edit', compact('data', 'cat'));
     }
 
@@ -218,7 +154,7 @@ class VendorToursController extends Controller
             'whats_include' => 'required',
         ]);
 
-        if($validator->fails()) {
+        if ($validator->fails()) {
             return Redirect::back()->withErrors($validator);
         }
 
@@ -236,13 +172,12 @@ class VendorToursController extends Controller
         $data->whats_include = $request->whats_include;
         $data->save();
 
-
-        if($request->hasFile('image')){
+        if ($request->hasFile('image')) {
             foreach ($request->file('image') as $imagefile) {
                 $filename = date('d-m-y-H-i-s').'_'.$imagefile->getClientOriginalName();
                 $path = 'public/tours/';
                 $url_path = 'storage/tours/';
-                $imagefile->storeAs($path,$filename);
+                $imagefile->storeAs($path, $filename);
                 DB::table('tours_images')->insert(
                     ['tour_id' => $data->id, 'image' => env('APP_URL').$url_path.$filename]
                 );
@@ -261,16 +196,18 @@ class VendorToursController extends Controller
         //
     }
 
-    public function vendorFilesDelete(Request $request){
+    public function vendorFilesDelete(Request $request)
+    {
         $id = $request->id;
         $table = $request->table;
-        if($table == 0){
+        if ($table == 0) {
             RentalsImages::find($id)->delete();
-        }else if($table == 1){
+        } elseif ($table == 1) {
             RentalsAddons::find($id)->delete();
-        }else if($table == 2){
+        } elseif ($table == 2) {
             ToursImages::find($id)->delete();
         }
+
         return response()->json(['status' => true, 'message' => 'Image Deleted Successfully']);
     }
 }

@@ -9,5 +9,10 @@ class CardDetail extends Model
 {
     use HasFactory;
 
-protected $guarded = [];
+    protected $guarded = [];
+
+    public function payment()
+    {
+        return $this->belongsTo(Payment::class);
+    }
 }
