@@ -247,9 +247,10 @@
                         <li class="steps-listing" data-index="3" data-tab="3">
                             <form action="{{ route('vendor.location.update') }}" id="locationupdate">
                                 @csrf
-                                <input type="hidden" id="locations_lat" name="locations_lat">
+                                <input type="hidden" id="locations_lat" value="{{ Auth::user()->lat ?? 0 }}"
+                                    name="locations_lat">
                                 <input type="hidden" id="locations_lng" name="locations_lng"
-                                    value="{{ Auth::user()->lat }}">
+                                    value="{{ Auth::user()->lng ?? 0 }}">
                                 <div class="regitration-map-box" id="pac-card">
                                     <div class="contact-form-fields registration-form-fields justify-content-center">
                                         <div class="contact-form-field registration-form-field search-field">
@@ -653,15 +654,15 @@
                                 </div>
 
                                 <!-- <div class="regiter-btn payment-method-btn text-center mb-10">
-                                                                                                                            <a href="#" class="btn-c step-form-next">Add a payment method</a>
-                                                                                                                            </div> -->
+                                                                                                                                <a href="#" class="btn-c step-form-next">Add a payment method</a>
+                                                                                                                                </div> -->
                             </div>
                             <div class="registration-content text-center">
                                 <a class="" href="./">SKIP</a>
                             </div>
                 </div>
                 </li>
-                <li >
+                <li>
                     <div class="payment-mainbox">
                         <div class="register-content add-card-content text-center">
                             <h2 class="primary-hd mb-10">Payment Management <button class="step-form-next"><img
@@ -672,12 +673,14 @@
                                         <div class="add-card-box">
                                             <div class="add-card-box-img-and-content">
                                                 <div class="add-card-box-img">
-                                                    <img src="{{ asset('assets/images/cards/'.$item->payment_type.'.png') }}" alt="">
+                                                    <img src="{{ asset('assets/images/cards/' . $item->payment_type . '.png') }}"
+                                                        alt="">
                                                 </div>
                                                 <div class="add-card-box-content active">
                                                     <h6>{{ ucwords($item->payment_type) }}
                                                         {!! $item->default_payment == 1 ? '<span>Default</span>' : '' !!}</h6>
-                                                    <p><span>************</span>{{ ' '.substr($item->cardDetail->card_number, -4)}}</p>
+                                                    <p><span>************</span>{{ ' ' . substr($item->cardDetail->card_number, -4) }}
+                                                    </p>
                                                 </div>
                                             </div>
                                             <div class="add-card-box-menu">
@@ -694,8 +697,9 @@
                                                             <button>Delete</button>
                                                         </form>
                                                     </li>
-                                                    @if ($item->default_payment ==0)
-                                                    <li> <a href="{{route('vendor.makedefaultpay',$item->id)}}">Make Default</a></li>
+                                                    @if ($item->default_payment == 0)
+                                                        <li> <a href="{{ route('vendor.makedefaultpay', $item->id) }}">Make
+                                                                Default</a></li>
                                                     @endif
 
                                                 </ul>
@@ -1024,8 +1028,8 @@
         function initAutocomplete() {
             const map = new google.maps.Map(document.getElementById("map"), {
                 center: {
-                    lat: -33.8688,
-                    lng: 151.2195
+                    lat: Number(document.getElementById('locations_lat').value),
+                    lng: Number(document.getElementById('locations_lng').value)
                 },
                 zoom: 13,
                 mapTypeId: "roadmap",
