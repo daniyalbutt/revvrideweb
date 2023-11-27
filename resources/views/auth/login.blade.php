@@ -31,7 +31,7 @@
                     <div class="sign-content text-center mb-40">
                         <p class="primary-para">Please sign-in to your account and start the adventure</p>
                     </div>
-                    <form method="POST" action="{{ route('login') }}" class="sign-form">
+                    <form method="POST" action="{{ route('login') }}" id="signform" class="sign-form">
                         @csrf
                         <div class="contact-form-field sign-field mb-20">
                             <label class="mb-10" for="signusername">Username</label>
@@ -52,6 +52,17 @@
                             </span>
                             @enderror
                         </div>
+                        <div class="contact-form-field sign-field mb-20" id="otpdiv" style="display:none;">
+                            <label class="mb-10" for="password">Enter OTP</label>
+                            <input id="otp" type="number" class="form-control @error('otp') is-invalid @enderror" name="otp">
+                            <button><i class="fas fa-eye-slash" id="eye"></i></button>
+                            @error('otp')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+
                         <div class="remember-and-forgot mb-10">
                             <div class="mb-10">
                                 <input class="form-check-input" type="checkbox" value="Remember Me" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
@@ -63,7 +74,7 @@
                                 @endif
                             </div>
                         </div>
-                        <div class="sign-btn mb-20"><input class="btn-c" value="Sign In" type="submit"></div>
+                        <div class="sign-btn mb-20"><input id="login_submit" class="btn-c" value="Send OTP" type="submit"></div>
                     </form>
                     <div class="sign-content text-center">
                         <p class="primary-para mb-10">New on our platform? <a href="{{ route('register') }}">Create an account</a></p>
@@ -75,5 +86,23 @@
 </section>
 @endsection
 @push('script')
+<script>
+    $('#signform').submit(function (e) {
+        if ($('#otp').val().length === 0) {
+            e.preventDefault();
 
+            $.toast({
+                heading: 'OTP',
+                text: 'We have just sent you OTP',
+                showHideTransition: 'slide',
+                icon: 'success'
+            })
+
+            $('#login_submit').val('Login')
+            $('#otpdiv').slideDown();
+        }
+        // If OTP is present, the form will be submitted by default
+    })
+
+</script>
 @endpush

@@ -28,6 +28,9 @@
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
     <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}" type="image/x-icon">
     <link rel="icon" href="{{ asset('assets/images/favicon.ico') }}" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css"
+    integrity="sha512-wJgJNTBBkLit7ymC6vvzM1EcSWeM9mmOu+1USHaRBbHkm6W9EgM0HY27+UtUaprntaYQJF75rc8gjxllKs5OIQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
     @stack('styles')
 </head>
 
@@ -273,6 +276,9 @@
         integrity="sha512-Eak/29OTpb36LLo2r47IpVzPBLXnAMPAVypbSZiZ4Qkf8p/7S/XRG5xp7OKWPPYfJT6metI+IORkR5G8F900+g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="{{ asset('assets/js/custom.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"
+    integrity="sha512-zlWWyZq71UMApAjih4WkaRpikgY9Bz1oXIW5G0fED4vk14JjGlQ1UmkGM392jEULP8jbNMiwLWdM8Z87Hu88Fw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         new WOW().init();
     </script>
